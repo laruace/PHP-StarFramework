@@ -1,0 +1,37 @@
+
+2013-08-07 10:41:45:  exception 'RedisException' with message 'Can't connect to 127.0.0.1:6379' in D:\install\AppServ\www\star\library\Star\Cache\Redis.php:11
+Stack trace:
+#0 D:\install\AppServ\www\star\library\Star\Cache\Redis.php(11): Redis->connect('127.0.0.1', '6379')
+#1 D:\install\AppServ\www\star\library\Star\Cache.php(49): Star_Cache_Redis->__construct(Array)
+#2 D:\install\AppServ\www\star\library\Star\Cache.php(60): Star_Cache->factory(Array)
+#3 D:\install\AppServ\www\star\library\Star\Cache.php(86): Star_Cache::getCache()
+#4 D:\install\AppServ\www\star\application\controllers\IndexController.php(18): Star_Cache::add('aaa', 213)
+#5 D:\install\AppServ\www\star\library\Star\Controller\Action.php(95): IndexController->indexAction()
+#6 D:\install\AppServ\www\star\library\Star\Application.php(258): Star_Controller_Action->dispatch('indexAction')
+#7 D:\install\AppServ\www\star\library\Star\Application.php(41): Star_Application->dispatch()
+#8 D:\install\AppServ\www\star\public\index.php(29): Star_Application->run()
+#9 {main}
+2013-08-07 10:42:00:  exception 'RedisException' with message 'Can't connect to 127.0.0.1:6379' in D:\install\AppServ\www\star\library\Star\Cache\Redis.php:11
+Stack trace:
+#0 D:\install\AppServ\www\star\library\Star\Cache\Redis.php(11): Redis->connect('127.0.0.1', '6379')
+#1 D:\install\AppServ\www\star\library\Star\Cache.php(49): Star_Cache_Redis->__construct(Array)
+#2 D:\install\AppServ\www\star\library\Star\Cache.php(60): Star_Cache->factory(Array)
+#3 D:\install\AppServ\www\star\library\Star\Cache.php(86): Star_Cache::getCache()
+#4 D:\install\AppServ\www\star\application\controllers\IndexController.php(18): Star_Cache::add('aaa', 213)
+#5 D:\install\AppServ\www\star\library\Star\Controller\Action.php(95): IndexController->indexAction()
+#6 D:\install\AppServ\www\star\library\Star\Application.php(258): Star_Controller_Action->dispatch('indexAction')
+#7 D:\install\AppServ\www\star\library\Star\Application.php(41): Star_Application->dispatch()
+#8 D:\install\AppServ\www\star\public\index.php(29): Star_Application->run()
+#9 {main}
+2013-08-07 10:42:03:  exception 'RedisException' with message 'Can't connect to 127.0.0.1:6379' in D:\install\AppServ\www\star\library\Star\Cache\Redis.php:11
+Stack trace:
+#0 D:\install\AppServ\www\star\library\Star\Cache\Redis.php(11): Redis->connect('127.0.0.1', '6379')
+#1 D:\install\AppServ\www\star\library\Star\Cache.php(49): Star_Cache_Redis->__construct(Array)
+#2 D:\install\AppServ\www\star\library\Star\Cache.php(60): Star_Cache->factory(Array)
+#3 D:\install\AppServ\www\star\library\Star\Cache.php(86): Star_Cache::getCache()
+#4 D:\install\AppServ\www\star\application\controllers\IndexController.php(18): Star_Cache::add('aaa', 213)
+#5 D:\install\AppServ\www\star\library\Star\Controller\Action.php(95): IndexController->indexAction()
+#6 D:\install\AppServ\www\star\library\Star\Application.php(258): Star_Controller_Action->dispatch('indexAction')
+#7 D:\install\AppServ\www\star\library\Star\Application.php(41): Star_Application->dispatch()
+#8 D:\install\AppServ\www\star\public\index.php(29): Star_Application->run()
+#9 {main}
