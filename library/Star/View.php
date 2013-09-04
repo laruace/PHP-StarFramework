@@ -24,6 +24,30 @@ class Star_View extends Star_View_Abstract{
         }
 	}
 	
+    /**
+     * 设置配置项
+     * 
+     * @param array $options 
+     */
+    public function setOption(array $options) 
+    {
+        if (!empty($options))
+        {
+            $methods = get_class_methods($this);
+
+            foreach ($options as $method => $option)
+            {
+                $method = "set" . ucfirst($method);
+
+                if (in_array($method, $methods))
+                {
+                    call_user_func(array($this, $method), $option);
+                }
+            }
+
+        }
+
+    }
 }
 
 ?>

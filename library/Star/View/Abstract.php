@@ -6,7 +6,7 @@
  *
  */
 
-class Star_View_Abstract {
+abstract class Star_View_Abstract {
 	
 	protected $_script_name = '';
 	
@@ -17,8 +17,10 @@ class Star_View_Abstract {
 	protected $_is_display = true; //是否显示view
 	
 	protected $_controller; 
-	
-	protected $_postfix = '.phtml'; //后缀
+    
+    protected $_action;
+
+    protected $_postfix = '.phtml'; //后缀
 	
 	protected $_theme_name = 'scripts';
 	
@@ -31,6 +33,14 @@ class Star_View_Abstract {
 	protected $encoding = 'UTF-8'; //默认编码
     
     protected $js_options = array();
+    
+    protected $is_cache = false; //页面是否缓存
+    
+    protected $timeout = 3600; //缓存时间
+    
+    protected $cache_directory = 'caches'; //缓存目录
+    
+    protected $cache_name = 'index'; //缓存名
 
     public function __construct($application_path = '', $options = array())
 	{
@@ -41,23 +51,7 @@ class Star_View_Abstract {
 		$this->run();
 	}
 	
-	public function setOption($options)
-	{
-		if (isset($options['encoding']) && !empty($options['encoding']))
-		{
-			$this->setEncoding($options['encoding']);
-		}
-
-        if (isset($options['js']) && !empty($options['js']))
-        {
-            $this->addJsConfig($options['js']);
-        }
-        
-        if (isset($options['base_path']) && !empty($options['base_path']))
-        {
-            $this->setBasePath($options['base_path']);
-        }
-	}
+	abstract protected function setOption(Array $options);
 	
 	protected function run()
 	{
@@ -110,6 +104,13 @@ class Star_View_Abstract {
 		
 		return $this;
 	}
+    
+    public function setAction($action)
+    {
+        $this->_action = $action;
+        
+        return $this;
+    }
 	
 	private function getViewPath()
 	{
@@ -238,6 +239,18 @@ class Star_View_Abstract {
     }
     
     /**
+     * 设置加载js文件
+     * 
+     * @param type $files 
+     */
+    public function setJsFiles($files)
+    {
+        $this->js_options['files'] = array_merge((array) $this->js_options['files'], (array) $files);
+        
+        return $this;
+    }
+    
+    /**
      * 返回JS版本号
      * 
      * @return type 
@@ -252,7 +265,7 @@ class Star_View_Abstract {
      * 
      * @param type $options 
      */
-    public function addJsConfig($options)
+    public function setJsConfig($options)
     {   
         //设置基础路径
         if (isset($options['base_path']) && !empty($options['base_path']))
@@ -263,7 +276,7 @@ class Star_View_Abstract {
         //添加加载js文件
         if (isset($options['files']) && !empty($options['files']))
         {
-            $this->js_options['files'] = array_merge((array) $this->js_options['files'], (array) $options['files']);
+            $this->setJsFiles($options['files']);
         }
         
         //设置js版本号
@@ -311,6 +324,128 @@ class Star_View_Abstract {
         return $this->js_options['base_path'];
     }
     
+    //设置缓存超时时间
+    public function setCacheTimeout($timeout)
+    {
+        $this->timeout = (int) $timeout;
+        
+        return $this;
+    }
+    
+    /**
+     * 设置缓存路径
+     * 
+     * @param type $directory
+     * @return \Star_View_Abstract 
+     */
+    public function setCacheDirectory($directory)
+    {
+        !empty($directory) && $this->cache_directory = $directory;
+        return $this;
+    }
+    
+    /**
+     * 是否缓存
+     * 
+     * @return type 
+     */
+    public function isCache()
+    {
+        return $this->is_cache;
+    }
+
+
+    /**
+     * 读取缓存信息
+     * 
+     * @param type $cache_path
+     * @return boolean
+     * @throws Star_Exception 
+     */
+    protected function loadCache()
+    {
+        $cache_path = $this->getCacheFileName(); //缓存文件
+        
+        //判断文件是否存在
+        if (!is_file($cache_path))
+        {
+            return false;
+        }
+        
+        //文件是否可以
+        if (!is_readable($cache_path))
+        {
+            throw new Star_Exception("Connt open $cache_path for read");
+        }
+        
+        //缓存是否超时
+        if (time() - filemtime($cache_path) > $this->timeout)
+        {
+            return false;
+        }
+        
+        echo $body = file_get_contents($cache_path);
+        ob_end_flush();
+        exit;
+    }
+    
+    //保存缓存内容
+    public function saveCache($body)
+    {
+        $file_name = $this->getCacheFileName();
+        
+        if (!is_dir(dirname($file_name)))
+        {
+            mkdir(dirname($file_name), 0777, true);
+        }
+        
+        if (false === ($handle = @fopen($file_name, 'w')))
+        {
+            throw new Star_Exception("Connt open $file_name for writing");
+        }
+
+        fwrite($handle, $body);
+        fclose($handle);
+    }
+
+    //开启页面缓存
+    public function openCache($option = array())
+    {
+        if (isset($option['timeout']) && $option['timeout'] > 0)
+        {
+            $this->setCacheTimeout($option['timeout']);
+        }
+        
+        if (isset($option['cache_name']) && !empty($option['cache_name']))
+        {
+            $this->setCacheName($option['cache_name']);
+        }
+        
+        $this->is_cache = true;
+        
+        $this->loadCache();
+    }
+    
+    public function setCacheName($cache_name)
+    {
+        $this->cache_name = $cache_name;
+    }
+    
+    //返回文件路径
+    public function getCacheFileName()
+    {
+        $segments = array(
+            $this->application_path,
+            $this->cache_directory,
+            $this->_controller,
+            $this->_action,
+            $this->cache_name
+        );
+        
+        $path = Star_Loader::getFilePath($segments, '.html');
+  
+        return $path;
+    }
 }
 
 ?>

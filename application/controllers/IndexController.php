@@ -10,14 +10,14 @@ class IndexController extends Star_Controller_Action
 	public function indexAction()
 	{
         //$user_service = new UserService();
-        
+
         $user_service = new UserService();
         
         var_dump($user_service->getUserByPage(1, 1));
         
         $this->view->assign('title', 'Hello world!');
         
-        $this->view->addJsConfig(array(
+        $this->view->setJsConfig(array(
             'files' => array('jquery')
         ));
         
@@ -31,7 +31,8 @@ class IndexController extends Star_Controller_Action
 	
 	public function helloAction()
 	{
-        $this->view->setNoRender();
+        $this->view->title = 'Hello world';
+        //$this->view->setNoRender();
 	}
     
 }

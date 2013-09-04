@@ -230,25 +230,22 @@ class Star_Application {
             $controller = new $controller_class($request, $this->view);
             $action = $request->getAction();
             $controller->dispatch($action);
-            
+            call_user_func(array('Star_Model_Abstract', 'Close'));
         } catch (Exception $e)
         {
             return $this->handleException($e);
         }
-        
-        call_user_func(array('Star_Model_Abstract', 'Close'));
 
 		if ($controller->layout instanceof Star_Layout && $controller->layout->isEnabled() == true)
 		{
 			$body = ob_get_contents();
-			ob_end_clean();
-			
+			ob_clean();
 			$this->setLayout($controller->view, $controller->layout, $body);
-		} else
-		{
-			ob_end_flush();
-		}
-		
+		} 
+        
+        $controller->view->saveCache(ob_get_contents());
+        
+		ob_end_flush();
 	}
     
     /**
