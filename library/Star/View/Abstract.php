@@ -36,7 +36,7 @@ abstract class Star_View_Abstract {
     
     protected $is_cache = false; //页面是否缓存
     
-    protected $timeout = 3600; //缓存时间
+    protected $timeout = 600; //缓存时间
     
     protected $cache_directory = 'caches'; //缓存目录
     
@@ -353,7 +353,20 @@ abstract class Star_View_Abstract {
     {
         return $this->is_cache;
     }
-
+    
+    //缓存是否过期
+    public function cacheIsExpire()
+    {
+        $cache_path = $this->getCacheFileName();
+        
+        if (time() - filemtime($cache_path) >= $this->timeout || !is_file($cache_path))
+        {
+            return true;
+        } else
+        {
+            return false;
+        }
+    }
 
     /**
      * 读取缓存信息
@@ -379,7 +392,7 @@ abstract class Star_View_Abstract {
         }
 
         //缓存是否超时
-        if (time() - filemtime($cache_path) >= $this->timeout)
+        if ($this->cacheIsExpire() == true)
         {
             return false;
         }

@@ -244,11 +244,7 @@ class Star_Application {
 			$this->setLayout($controller->view, $controller->layout, $body);
 		}
         
-        //开启缓存 存储缓存内容
-        if ($controller->view->isCache() == true)
-        {
-            $controller->view->saveCache(ob_get_contents());
-        }
+        $this->saveViewCache($controller->view, ob_get_contents()); //存储页面缓存
         
 		ob_end_flush();
 	}
@@ -373,6 +369,20 @@ class Star_Application {
     {
         $this->request->setActionKey($action_key);
         return $this;
+    }
+    
+    /**
+     * 保存页面缓存 
+     */
+    protected function saveViewCache(Star_View $view, $body)
+    {
+        //开启缓存，且缓存超时或者缓存不存在，则写入缓存
+        if ($view->isCache() == true && $view->cacheIsExpire() == true)
+        {
+            $view->saveCache($body);
+        }
+        
+        return $view->isCache();
     }
     
     public function handleException($e)

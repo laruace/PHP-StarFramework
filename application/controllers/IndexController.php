@@ -23,7 +23,7 @@ class IndexController extends Star_Controller_Action
         $this->view->setJsConfig(array(
             'files' => array('jquery')
         ));
-        
+        echo time();
         //$str = "fjakldjflakg'ja'gjqpoigjq;k<>faf<a href=www.baidu.com>www.baidu.com</a>";
 
         //echo Star_Filter::escape($str);
