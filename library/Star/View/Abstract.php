@@ -359,7 +359,7 @@ abstract class Star_View_Abstract {
     {
         $cache_path = $this->getCacheFileName();
         
-        if (time() - filemtime($cache_path) >= $this->timeout || !is_file($cache_path))
+        if (!file_exists($cache_path) || time() - filemtime($cache_path) >= $this->timeout)
         {
             return true;
         } else
