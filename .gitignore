@@ -1,0 +1,6 @@
+echo .htaccess>.gitignore
+echo .project>.gitignore
+echo .settings>.gitignore
+echo favicon.ico>.gitignore
+echo nbproject>.gitignore
+echo application/caches>.gitignore
