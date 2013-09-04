@@ -10,6 +10,9 @@ class IndexController extends Star_Controller_Action
 	public function indexAction()
 	{
         //$user_service = new UserService();
+        $this->view->openCache();
+        
+        $this->view->loadCache();
 
         $user_service = new UserService();
         

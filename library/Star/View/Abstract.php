@@ -362,7 +362,7 @@ abstract class Star_View_Abstract {
      * @return boolean
      * @throws Star_Exception 
      */
-    protected function loadCache()
+    public function loadCache()
     {
         $cache_path = $this->getCacheFileName(); //缓存文件
         
@@ -377,15 +377,15 @@ abstract class Star_View_Abstract {
         {
             throw new Star_Exception("Connt open $cache_path for read");
         }
-        
+
         //缓存是否超时
-        if (time() - filemtime($cache_path) > $this->timeout)
+        if (time() - filemtime($cache_path) >= $this->timeout)
         {
             return false;
         }
         
-        echo $body = file_get_contents($cache_path);
-        ob_end_flush();
+        include $cache_path; //载入缓存文件
+        ob_end_flush(); //输出缓存
         exit;
     }
     
@@ -409,21 +409,19 @@ abstract class Star_View_Abstract {
     }
 
     //开启页面缓存
-    public function openCache($option = array())
+    public function openCache($cache_name = 'index', $timeout = 0)
     {
-        if (isset($option['timeout']) && $option['timeout'] > 0)
+        if ($timeout > 0)
         {
-            $this->setCacheTimeout($option['timeout']);
+            $this->setCacheTimeout($timeout);
         }
         
-        if (isset($option['cache_name']) && !empty($option['cache_name']))
+        if (!empty($cache_name))
         {
-            $this->setCacheName($option['cache_name']);
+            $this->setCacheName($cache_name);
         }
         
         $this->is_cache = true;
-        
-        $this->loadCache();
     }
     
     public function setCacheName($cache_name)

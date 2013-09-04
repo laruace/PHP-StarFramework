@@ -226,24 +226,29 @@ class Star_Application {
 		ob_start();
 
         try{
-            $controller_class = $this->loadController($request);
-            $controller = new $controller_class($request, $this->view);
-            $action = $request->getAction();
-            $controller->dispatch($action);
-            call_user_func(array('Star_Model_Abstract', 'Close'));
+            $controller_class = $this->loadController($request); //返回controller
+            $controller = new $controller_class($request, $this->view); //实例化controller
+            $action = $request->getAction(); //返回action
+            $controller->dispatch($action); //执行action
+            call_user_func(array('Star_Model_Abstract', 'Close')); //主动关闭数据库链接
         } catch (Exception $e)
         {
             return $this->handleException($e);
         }
-
+        
+        //开启layout 加载layout
 		if ($controller->layout instanceof Star_Layout && $controller->layout->isEnabled() == true)
 		{
 			$body = ob_get_contents();
 			ob_clean();
 			$this->setLayout($controller->view, $controller->layout, $body);
-		} 
+		}
         
-        $controller->view->saveCache(ob_get_contents());
+        //开启缓存 存储缓存内容
+        if ($controller->view->isCache() == true)
+        {
+            $controller->view->saveCache(ob_get_contents());
+        }
         
 		ob_end_flush();
 	}
