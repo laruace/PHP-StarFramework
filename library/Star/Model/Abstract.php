@@ -212,8 +212,8 @@ abstract class Star_Model_Abstract
 		if (is_array($db) && in_array(strtolower($db['adapter']), $this->_support_db))
 		{
 			$adapter = ucfirst($db['adapter']);
+            require_once "Star/Model/{$adapter}/Abstract.php";
 			$adapter = 'Star_Model_' . $adapter . '_Abstract';
-
 			return new $adapter($db['params']);
 		}
 	}

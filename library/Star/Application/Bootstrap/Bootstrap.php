@@ -9,6 +9,7 @@
  * 
  */
 
+require 'Star/Application/Bootstrap/Abstract.php';
 
 class Star_Application_Bootstrap_Bootstrap extends Star_Application_Bootstrap_Abstract
 {

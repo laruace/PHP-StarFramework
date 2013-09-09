@@ -7,6 +7,8 @@
  *
  */
 
+require 'Star/Http/Abstract.php';
+
 class Star_Http_Request extends Star_Http_Abstract
 {
     protected $params = array();

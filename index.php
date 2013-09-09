@@ -1,4 +1,5 @@
 <?php
+global $star_time;
 $star_time = microtime();
 // Define path to application directory
 defined('APPLICATION_PATH')
@@ -22,11 +23,12 @@ require 'Page.php';
 $application = new Star_Application(
     APPLICATION_ENV,
     APPLICATION_PATH,
-    APPLICATION_PATH . '/configs/application.ini',
+    APPLICATION_PATH . '/configs/application.php',
     realpath(APPLICATION_PATH . '/../library')
 );
 
 $application->bootstrap()->run();
+print_r(get_included_files());
 echo "<br />";
 echo microtime() - $star_time;
 

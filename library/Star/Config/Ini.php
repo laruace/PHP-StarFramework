@@ -9,6 +9,7 @@
  *
  */
 
+require 'Star/Config/Abstract.php';
 
 class Star_Config_Ini extends Star_Config_Abstract{
 	
@@ -39,17 +40,18 @@ class Star_Config_Ini extends Star_Config_Abstract{
 
 		$ini_array = $ini_array[$this->environment];
 		
-		$config = array();
+		$configs = array();
 
 		if (!empty($ini_array) && is_array($ini_array))
 		{
 			foreach ($ini_array as $key => $value)
 			{
-				$config = $this->processKey($config, explode('.', $key), $value);
+				$configs = $this->processKey($configs, explode('.', $key), $value);
+                //$configs = array_merge_recursive($configs, $this->processKey(explode( '.', $key), $value));
 			}
 		}
 
-		return $config;
+        return $configs;
 	}
 	
     /**
@@ -64,6 +66,17 @@ class Star_Config_Ini extends Star_Config_Abstract{
 	{
 		if (!empty($keys) && is_array($keys))
 		{
+            /*
+            $config = array();
+            $reverse_key = array_reverse($keys);
+            
+            foreach ($reverse_key as $key)
+            {
+                $buffer = array();
+                $buffer[$key] = empty($config) ? $value : $config;
+                $config = $buffer;
+            }
+            */
 			$key = array_shift($keys);
 
 			if (!empty($keys) && is_array($keys))

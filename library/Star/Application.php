@@ -4,6 +4,12 @@ require 'Star/Loader/Loader.php';
 
 require 'Star/Layout/Layout.php';
 
+require 'Star/Config.php';
+
+require 'Star/Registry.php';
+
+require 'Star/Model/Abstract.php';
+
 class Star_Application {
 
     protected $display_exceptions = false;
@@ -25,6 +31,7 @@ class Star_Application {
 		$this->setAutoload($star_path);
         
 		$star_config = new Star_Config($config_file, $application_env);
+        
 		$options = $star_config->loadConfig();
         
 		$this->setOption($options);
@@ -102,6 +109,7 @@ class Star_Application {
      */
 	protected function setView($options)
 	{
+        require 'Star/View.php';
 		$this->view = new Star_View($this->application_path, $options);
 		
 		return $this;
@@ -191,6 +199,7 @@ class Star_Application {
 	{
 		if ($options['is_cache'] == true)
 		{
+            require 'Star/Cache.php';
 			Star_Cache::initInstance($options);
 		}
 	}
@@ -226,6 +235,7 @@ class Star_Application {
 		ob_start();
 
         try{
+            require 'Star/Controller/Action.php';
             $controller_class = $this->loadController($request); //返回controller
             $controller = new $controller_class($request, $this->view); //实例化controller
             $action = $request->getAction(); //返回action
@@ -331,6 +341,7 @@ class Star_Application {
      */
 	protected function iniRequest()
 	{
+        require 'Star/Http/Request.php';
 		$request = new Star_Http_Request();
 		$this->request = $request;
 	}

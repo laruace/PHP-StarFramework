@@ -5,6 +5,7 @@
  * @author 
  */
 
+require 'Star/Cache/Interface.php';
 
 class Star_Cache_Memcache implements Star_Cache_Interface {
 

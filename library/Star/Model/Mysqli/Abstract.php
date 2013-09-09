@@ -1,5 +1,8 @@
 <?php
 
+require_once 'Star/Model/Interface.php';
+require_once 'Star/Model/Mysqli/Select.php';
+
 class Star_Model_Mysqli_Abstract implements Star_Model_Interface
 {
 	protected $db;

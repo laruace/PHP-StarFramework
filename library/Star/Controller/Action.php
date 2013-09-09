@@ -5,6 +5,8 @@
  * @author zhangqinyang
  */
 
+require 'Star/Controller/Action/Interface.php';
+
 class Star_Controller_Action implements Star_Controller_Action_Interface{
 
 	protected $request;

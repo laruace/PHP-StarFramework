@@ -9,6 +9,7 @@
  *
  */
 
+require 'Star/Config/Abstract.php';
 
 class Star_Config_Php extends Star_Config_Abstract{
 

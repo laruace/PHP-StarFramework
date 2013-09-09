@@ -6,6 +6,8 @@
  * 
  */
 
+require 'Star/Cache/Interface.php';
+
 class Star_Cache_Memcached implements Star_Cache_Interface {
 
 	public $memcached = null;

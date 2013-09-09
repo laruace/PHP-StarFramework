@@ -10,20 +10,16 @@ class IndexController extends Star_Controller_Action
 	public function indexAction()
 	{
         //$user_service = new UserService();
-        $this->view->openCache();
+        //$this->view->openCache();
         
-        $this->view->loadCache();
-
-        $user_service = new UserService();
+        //$this->view->loadCache();
         
-        var_dump($user_service->getUserByPage(1, 1));
+        //$this->view->assign('title', 'Hello world!');
         
-        $this->view->assign('title', 'Hello world!');
-        
-        $this->view->setJsConfig(array(
-            'files' => array('jquery')
-        ));
-        echo time();
+        //$this->view->setJsConfig(array(
+        //    'files' => array('jquery')
+        //));
+        //echo date('Y-m-d H:i:s');
         //$str = "fjakldjflakg'ja'gjqpoigjq;k<>faf<a href=www.baidu.com>www.baidu.com</a>";
 
         //echo Star_Filter::escape($str);
