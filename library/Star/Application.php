@@ -31,9 +31,7 @@ class Star_Application {
 		$this->setAutoload($star_path);
         
 		$star_config = new Star_Config($config_file, $application_env);
-        
 		$options = $star_config->loadConfig();
-        
 		$this->setOption($options);
         $this->iniRequest();
 	}
@@ -52,10 +50,36 @@ class Star_Application {
 	 * @param array $options
 	 */
 	protected function setOption(array $options)
-	{        
+	{
+        /*
+        if (isset($options['phpSetting']) && !empty($options['phpSetting']))
+        {
+            $this->setPhpSettings($options['phpSetting']);
+        }
+        
+        if (isset($options['bootstrap']) && !empty($options['bootstrap']))
+        {
+            $this->setBootstrap($options['bootstrap']);
+        }
+        
+        if (isset($options['resources']) && !empty($options['resources']))
+        {
+            $this->setResources($options['resources']);
+        }
+        
+        if (isset($options['cache']) && !empty($options['cache']))
+        {
+            $this->setCache($options['cache']);
+        }
+        
+        return ;
+         * 
+         */
+        
         if (is_array($options))
         {
             $methods = get_class_methods($this);
+            
             foreach ($options as $key => $option)
             {
                 $method = 'set' . ucfirst($key);
@@ -137,15 +161,11 @@ class Star_Application {
 			$class = "Bootstrap";
 		}
 		
-		if (!class_exists($class, false))
-		{
-			require $bootstrap_path;
-			
-			if (!class_exists($class, false))
-			{
-				throw new Star_Exception('Bootstrap class not found.');
-			}
-		}
+        require $bootstrap_path;
+        if (!class_exists($class, false))
+        {
+            throw new Star_Exception('Bootstrap class not found.');
+        }
 		
 		$this->bootstrap = new $class($this);
 	}

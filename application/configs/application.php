@@ -6,15 +6,11 @@ return array(
             'display_startup_errors' => 1,
             'display_errors' => 1,
         ),
-        'includePaths' => array(
-            'library' => APPLICATION_PATH . "/../library",
-        ),
         'bootstrap' => array(
             'path' => APPLICATION_PATH . "/Bootstrap.php",
             'class' => 'Bootstrap',
 
         ),
-        'appnamespace' => 'Application',
         'resources' => array(
             'frontController' => array(
                 'params' => array(

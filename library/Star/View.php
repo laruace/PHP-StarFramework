@@ -46,7 +46,6 @@ class Star_View extends Star_View_Abstract{
                     call_user_func(array($this, $method), $option);
                 }
             }
-
         }
 
     }

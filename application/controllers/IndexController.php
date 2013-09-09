@@ -26,6 +26,7 @@ class IndexController extends Star_Controller_Action
 
         //echo date('Y-m-d H:i:s', Star_Date::getLastWeek());
         echo "Hello world";
+        //$this->view->setNoRender();
 	}
 	
 	public function helloAction()

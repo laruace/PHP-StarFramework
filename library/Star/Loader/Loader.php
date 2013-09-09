@@ -92,7 +92,6 @@ class Star_Loader {
 	 */
 	public static function autoload($class_name)
 	{
-        echo $class_name . "<br />";
 		if (self::isClassLoader($class_name) == true)
 		{
 			return ;
