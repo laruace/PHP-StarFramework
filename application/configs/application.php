@@ -22,6 +22,7 @@ return array(
                 'layoutPath' => APPLICATION_PATH . "/layouts/scripts/",
             ),
             'view' => array(
+                'display' => false,
                 'js' => array(
                     'base' => 'http://www.star.com'
                 )

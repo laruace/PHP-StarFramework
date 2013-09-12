@@ -131,10 +131,37 @@ class Star_Http_Request extends Star_Http_Abstract
      * 
      * @return type 
      */
-	public function getHost()
+	public static function getHost()
 	{
 		return $_SERVER['HTTP_HOST'];
 	}
+    
+    /**
+     * 返回用户访问IP 
+     */
+    public static function getIp()
+    {
+        $realip = '';
+        if (isset($_SERVER)){
+            if (isset($_SERVER["HTTP_X_FORWARDED_FOR"])){
+                $realip = $_SERVER["HTTP_X_FORWARDED_FOR"];
+            } else if (isset($_SERVER["HTTP_CLIENT_IP"])) {
+                $realip = $_SERVER["HTTP_CLIENT_IP"];
+            } else {
+                $realip = $_SERVER["REMOTE_ADDR"];
+            }
+        } else {
+            if (getenv("HTTP_X_FORWARDED_FOR")){
+                $realip = getenv("HTTP_X_FORWARDED_FOR");
+            } else if (getenv("HTTP_CLIENT_IP")) {
+                $realip = getenv("HTTP_CLIENT_IP");
+            } else {
+                $realip = getenv("REMOTE_ADDR");
+            }
+        }
+        return $realip;
+    }
+    
 	
     /**
      * 解析访问URL

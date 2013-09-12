@@ -66,7 +66,7 @@ abstract class Star_Application_Bootstrap_Abstract
 	
 	protected function excuteResource($resource = null)
 	{
-		$resource_name = strtolower($resource);
+  		$resource_name = strtolower($resource);
 		
 		$class_resources = $this->getClassResources();
 

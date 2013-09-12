@@ -1,4 +1,5 @@
 <?php
+$start_time = microtime();
 // Define path to application directory
 defined('APPLICATION_PATH')
     || define('APPLICATION_PATH', realpath(dirname(__FILE__) . '/application'));
@@ -14,7 +15,6 @@ set_include_path(implode(PATH_SEPARATOR, array(
 )));
 
 require 'Star/Application.php';
-
 require 'Page.php'; 
 
 // Create application, bootstrap, and run
@@ -26,4 +26,5 @@ $application = new Star_Application(
 );
 
 $application->bootstrap()->run();
+echo microtime() - $start_time;
 ?>

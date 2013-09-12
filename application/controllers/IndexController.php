@@ -25,8 +25,10 @@ class IndexController extends Star_Controller_Action
         //echo Star_Filter::escape($str);
 
         //echo date('Y-m-d H:i:s', Star_Date::getLastWeek());
-        echo "Hello world";
+        //echo "Hello world";
+        
         //$this->view->setNoRender();
+        //$this->render('index');
 	}
 	
 	public function helloAction()

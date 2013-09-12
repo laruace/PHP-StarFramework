@@ -67,6 +67,17 @@ abstract class Star_View_Abstract {
 		return $this;
 	}
 	
+    protected function setDisplay($is_display)
+    {
+        if ($is_display == true)
+        {
+            $this->setRender();
+        } else
+        {
+            $this->setNoRender();
+        }
+    }
+    
 	public function setNoRender()
 	{
 		$this->_is_display = false;

@@ -133,7 +133,9 @@ class Star_Controller_Action implements Star_Controller_Action_Interface{
      */
 	protected function render($action, $is_controller = true)
 	{
-		$this->view->setScriptName($action, $is_controller);
+        
+		$this->view->setScriptName($action, $is_controller)->setRender();
+        
         return $this;
 	}
 	

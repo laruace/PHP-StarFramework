@@ -17,7 +17,7 @@ class LiveController extends Star_Controller_Action
         
         $this->view->assign('title', 'Hello world!');
         
-        $this->view->addJsConfig(array(
+        $this->view->setJsConfig(array(
             'files' => array('jquery')
         ));
         
