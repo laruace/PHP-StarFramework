@@ -34,13 +34,20 @@ abstract class Star_View_Abstract {
     
     protected $js_options = array();
     
+    protected $css_options = array();
+
     protected $is_cache = false; //页面是否缓存
     
-    protected $timeout = 600; //缓存时间
+    protected $timeout = 600; //默认缓存时间
     
     protected $cache_directory = 'caches'; //缓存目录
     
     protected $cache_name = 'index'; //缓存名
+    
+    protected $is_flush = false; //是否强制刷新缓存
+
+
+    protected $data = array();
 
     public function __construct($application_path = '', $options = array())
 	{
@@ -213,11 +220,11 @@ abstract class Star_View_Abstract {
         {
             foreach ($key as $k => $val)
             {
-                $this->$k = $val;
+                $this->data[$k] = $val;
             }
         } else
         {
-            $this->$key = $value;
+            $this->data[$key] = $value;
         }
         
         return $this;
@@ -237,6 +244,19 @@ abstract class Star_View_Abstract {
     }
     
     /**
+     * 设置css基础路径
+     * 
+     * @param type $path
+     * @return \Star_View_Abstract 
+     */
+    public function setCssBasePath($path)
+    {
+        $this->css_options['base_path'] = $path;
+        
+        return $this;
+    }
+    
+    /**
      * 设置js版本号
      * 
      * @param type $version
@@ -250,14 +270,38 @@ abstract class Star_View_Abstract {
     }
     
     /**
-     * 设置加载js文件
+     * 设置css样式版本号
+     * 
+     * @param type $version
+     * @return \Star_View_Abstract 
+     */
+    public function setCssVersion($version)
+    {
+        $this->css_options['version'] = $version;
+        return $this;
+    }
+    
+    /**
+     * 设置css加载文件
      * 
      * @param type $files 
      */
     public function setJsFiles($files)
     {
         $this->js_options['files'] = array_merge((array) $this->js_options['files'], (array) $files);
-        
+
+        return $this;
+    }
+    
+    /**
+     * 设置css加载文件
+     * 
+     * @param type $files
+     * @return \Star_View_Abstract 
+     */
+    public function setCssFiles($files)
+    {
+        $this->css_options['files'] = array_merge((array) $this->css_options['files'], (array) $files);
         return $this;
     }
     
@@ -271,6 +315,46 @@ abstract class Star_View_Abstract {
         return $this->js_options['version'];
     }
     
+    /**
+     * 返回css版本号
+     * 
+     * @return type 
+     */
+    public function getCssVersion()
+    {
+        return $this->css_options['version'];
+    }
+    
+    /**
+     * 设置css配置文件
+     * 
+     * @param type $options
+     * @return \Star_View_Abstract 
+     */
+    public function setCssConfig($options)
+    {
+        //设置基础路径
+        if (isset($options['base_path']) && !empty($options['base_path']))
+        {
+            $this->setCssBasePath($options['base_path']);
+        }
+
+        //添加加载css文件
+        if (isset($options['files']) && !empty($options['files']))
+        {
+            $this->setCssFiles($options['files']);
+        }
+        
+        //设置css版本号
+        if (isset($options['version']) && !empty($options['version']))
+        {
+            $this->setCssVersion($options['version']);
+        }
+        
+        return $this;
+    }
+
+
     /**
      * 添加js加载配置
      * 
@@ -314,15 +398,33 @@ abstract class Star_View_Abstract {
 
         if (isset($this->js_options['files']) && !empty($this->js_options['files']))
         {
-            foreach ($this->js_options['files'] as $file_name)
+            foreach ((array) $this->js_options['files'] as $file_name)
             {
-                $file_path = Star_Loader::getFilePath(array($base_path, $file_name), '.js');
+                $file_path = Star_Loader::getFilePath(array($base_path, $file_name), '.js', '/');
                 
                 $js_html .= "<script type='text/javascript' src='{$file_path}?v={$version}'></script>";
             }
         }
 
         return $js_html;
+    }
+    
+    public function loadCss()
+    {
+        $css_html = '';
+        $base_path = $this->getCssBasePath();
+        $version = $this->getCssVersion();
+        
+        if (isset($this->css_options['files']) && !empty($this->css_options['files'])) 
+        {
+            foreach ((array) $this->css_options['files'] as $file_name)
+            {
+                $file_path = Star_Loader::getFilePath(array($base_path, $file_name), '.css', '/');
+                $css_html .= "<link rel='stylesheet' type='text/css' href='{$file_path}?v={$version}' />";
+            }
+        }
+        
+        return $css_html;
     }
     
     /**
@@ -333,6 +435,11 @@ abstract class Star_View_Abstract {
     public function getJsBasePath()
     {
         return $this->js_options['base_path'];
+    }
+    
+    public function getCssBasePath()
+    {
+        return $this->css_options['base_path'];
     }
     
     //设置缓存超时时间
@@ -370,7 +477,7 @@ abstract class Star_View_Abstract {
     {
         $cache_path = $this->getCacheFileName();
         
-        if (!file_exists($cache_path) || time() - filemtime($cache_path) >= $this->timeout)
+        if (!file_exists($cache_path) || (time() - filemtime($cache_path) >= $this->timeout) || $this->is_flush == true)
         {
             return true;
         } else
@@ -409,10 +516,14 @@ abstract class Star_View_Abstract {
         }
         
         include $cache_path; //载入缓存文件
-        ob_end_flush(); //输出缓存
-        exit;
     }
     
+    public function flushCache()
+    {
+        return $this->is_flush = true;
+    }
+
+
     //保存缓存内容
     public function saveCache($body)
     {
@@ -433,7 +544,7 @@ abstract class Star_View_Abstract {
     }
 
     //开启页面缓存
-    public function openCache($cache_name = 'index', $timeout = 0)
+    public function openCache($cache_name = 'index', $timeout = 0, $is_flush = false)
     {
         if ($timeout > 0)
         {
@@ -443,6 +554,11 @@ abstract class Star_View_Abstract {
         if (!empty($cache_name))
         {
             $this->setCacheName($cache_name);
+        }
+        
+        if ($is_flush == true)
+        {
+            $this->flushCache();
         }
         
         $this->is_cache = true;
@@ -467,6 +583,14 @@ abstract class Star_View_Abstract {
         $path = Star_Loader::getFilePath($segments, '.html');
   
         return $path;
+    }
+    
+    public function __set($name, $value) {
+        $this->data[$name] = $value;
+    }
+    
+    public function __get($name) {
+        return $this->data[$name];
     }
 }
 

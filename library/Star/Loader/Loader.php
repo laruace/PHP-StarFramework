@@ -223,9 +223,9 @@ class Star_Loader {
      * @param postfix 后缀
      * @return type  
      */
-    public static function getFilePath(array $segments, $postfix = '.php')
+    public static function getFilePath(array $segments, $postfix = '.php', $dir_separator = DIRECTORY_SEPARATOR)
     {
-        $path = implode(DIRECTORY_SEPARATOR, $segments);
+        $path = implode($dir_separator, $segments);
         
         return $path . $postfix;
     }
@@ -236,9 +236,9 @@ class Star_Loader {
      * @param array $segments
      * @return type 
      */
-    public static function getDirPath(array $segments)
+    public static function getDirPath(array $segments, $dir_separator = DIRECTORY_SEPARATOR)
     {
-        $path = implode(DIRECTORY_SEPARATOR, $segments);
+        $path = implode($dir_separator, $segments);
         
         return $path;
     }

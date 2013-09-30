@@ -2,7 +2,7 @@
 
 class MemberModel extends Star_Model_Api {
     
-    protected $server_name = 'www.baidu.com';
+    protected $server_name = '';
 
     public function get()
     {

@@ -1,18 +1,19 @@
 <?php
 /**
  *
- * Filter类
+ * String类
  *
  * @author zhangqy
  *
  */
 
-class Star_Filter {
+class Star_String {
 	
 	public static function escape($str)
     {
         $str = trim($str); //去除两边空字符
-        $str = htmlentities($str, ENT_QUOTES); //
+        $str = htmlspecialchars_decode($str, ENT_QUOTES);
+        $str = htmlspecialchars($str, ENT_QUOTES); //
         return $str;
     }
     
@@ -63,6 +64,33 @@ class Star_Filter {
         $str = mb_substr($str, $start, $end, 'utf-8');
         return htmlentities($str, ENT_QUOTES);
     }
+    
+    public static function htmlspecialchars($str)
+    {
+        $str = htmlspecialchars_decode($str, ENT_QUOTES);
+        return htmlspecialchars($str, ENT_QUOTES);
+    }
+    
+    public static function htmlspecialchars_decode($str)
+    {
+        return htmlspecialchars_decode($str, ENT_QUOTES);
+    }
+    
+    public static function deepStripslashes($data)
+	{
+		if (is_array($data))
+		{
+			foreach ($data as $key => $value)
+			{
+				$data[$key] = self::deepStripslashes($value);
+			}
+		} else if (is_string($data))
+		{
+			$data = stripcslashes($data);
+		}
+		
+		return $data;
+	}
 }
 
 ?>

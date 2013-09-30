@@ -249,9 +249,8 @@ class Star_Application {
 	private function dispatch()
 	{
 		$request = $this->request;
-
+        header('Cache-Control: private');
 		header('Content-Type: text/html; charset=' . $this->view->getEncoding());
-		
 		ob_start();
 
         try{
@@ -274,7 +273,7 @@ class Star_Application {
 			$this->setLayout($controller->view, $controller->layout, $body);
 		}
         
-        $this->saveViewCache($controller->view, ob_get_contents()); //存储页面缓存
+        $this->saveViewCache($controller->view); //存储页面缓存
         
 		ob_end_flush();
 	}
@@ -405,12 +404,12 @@ class Star_Application {
     /**
      * 保存页面缓存 
      */
-    protected function saveViewCache(Star_View $view, $body)
+    protected function saveViewCache(Star_View $view)
     {
         //开启缓存，且缓存超时或者缓存不存在，则写入缓存
         if ($view->isCache() == true && $view->cacheIsExpire() == true)
         {
-            $view->saveCache($body);
+            $view->saveCache(ob_get_contents());
         }
         
         return $view->isCache();

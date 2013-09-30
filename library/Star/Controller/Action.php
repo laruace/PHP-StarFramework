@@ -182,7 +182,7 @@ class Star_Controller_Action implements Star_Controller_Action_Interface{
      */
 	protected function showJson()
 	{   
-		$args = func_num_args();
+		$args = func_get_args();
 		$message = array(
 			'status' => (bool) $args[0],
 			'message' => $args[1],
@@ -194,6 +194,54 @@ class Star_Controller_Action implements Star_Controller_Action_Interface{
         
 		return json_encode($message);
 	}
+    
+    protected function setNoRender()
+    {
+        $this->view->setNoRender();
+        
+        $this->disableLayout();
+    }
+    
+    protected function getRequest()
+    {
+        return $this->request;
+    }
+    
+    /**
+     * 开启页面缓存 
+     */
+    protected function openCache($cache_key = '', $timeout = 0, $is_flush = false)
+    {
+        !empty($cache_key) && $cache_key = $this->getRequest()->getActionName();
+        $this->view->openCache($cache_key, $timeout, $is_flush);
+    }
+    
+    /**
+     * 是否有页面缓存
+     * 
+     * @return type 
+     */
+    protected function isCache()
+    {
+        return $this->view->cacheIsExpire() == true ? false : true;
+    }
+
+    /**
+     * 显示页面缓存 
+     */
+    protected function showCache()
+    {
+        $this->setNoRender();
+        $this->view->loadCache();
+    }
+    
+    /**
+     * 强制刷新页面缓存 
+     */
+    protected function flushCache()
+    {
+        $this->view->flushCache();
+    }
 }
 
 ?>

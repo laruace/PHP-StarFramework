@@ -57,7 +57,7 @@ Class Star_Model_Api
         
         $cookie_string = $this->getCookieString($cookie);
         
-        $url = $protocol . "://" . $this->server_name . $script_name;
+        $url = $protocol . "://" . $this->getServerName() . $script_name;
         
         $ch = curl_init();
 
@@ -174,6 +174,12 @@ Class Star_Model_Api
      */
     public function getServerName()
     {
+        if (empty($this->server_name))
+        {
+            $config = Star_Registry::get('config');
+            $this->server_name = $config['resources']['api']['server_name'];
+        }
+
         return $this->server_name;
     }
 }

@@ -24,6 +24,8 @@ class Star_Layout {
 	protected $view = null;
 	
 	protected static $mvc_instance = null;
+    
+    public $content = null;
 	
 	public function __construct($options = array())
 	{

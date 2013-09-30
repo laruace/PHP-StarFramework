@@ -9,17 +9,27 @@ class Bootstrap extends Star_Application_Bootstrap_Bootstrap
 	{
 		//print_r(Star_Registry::get());
 	}
-	
+
 	protected function _initView()
 	{
-        return ;
+        return;
 		Star_Layout::startMvc(array(
 			'base_path' => APPLICATION_PATH . '/layouts',
 			'script_path' => 'default',
 		));
 	}
-	
-	protected function _initConfig()
+
+    protected function _initHttpCache()
+    {
+        if (Star_Http_Response::isCache() == true)
+        {
+            header('Cache-control: private');
+            header(Star_Http_Response::getCodeMessage(304));
+            exit;
+        }
+    }
+
+    protected function _initConfig()
 	{
         return ;
 		Star_Registry::set('ddd', 123);

@@ -8,9 +8,9 @@ class UserService {
 	{
 		$this->user_model = new UserModel();
         
-        //$member_model = new MemberModel();
+        $member_model = new MemberModel();
         
-        //print_r($member_model->get());
+        print_r($member_model->get());
 	}
 	
 	public function getUserByPage($page, $page_size)
@@ -20,13 +20,13 @@ class UserService {
 		//var_dump($this->user_model->update('uid = 10041692', array('is_assistant' => 1, 'nickname' => '333"&^哈哈')));
 		
 		//$this->user_model->getDefaultAdapter()->rollback();
-		
+
 		//$total = $this->user_model->getUserCount();
-		
+		set_time_limit(0);
         //$this->user_model->insert(array('token' => 'fjalkdfj', 'billno' => 'fhalffajkl'));
-		
-		$users = $this->user_model->getUserById();
-		
+
+        $users = $this->user_model->getUserById();
+
 		$page_data = array('total' => $total, 'page' => $page);
         
 		$page = Page::show($page_data);

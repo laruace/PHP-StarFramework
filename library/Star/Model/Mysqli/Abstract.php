@@ -162,12 +162,11 @@ class Star_Model_Mysqli_Abstract implements Star_Model_Interface
 		
 		$result = $this->_query($sql);
 		
-        
         $data = array();
 		
 		while ($rs = $result->fetch_assoc())
 		{
-			$data[] = $this->deepStripslashes($rs);
+			$data[] = $rs;
 		}
 		
 		$result->free();
@@ -195,6 +194,8 @@ class Star_Model_Mysqli_Abstract implements Star_Model_Interface
 		 $result = $this->_query($sql);
 	
 		$data = $result->fetch_assoc();
+        
+        $result->free();
 		
 		return is_array($data) ? current($data) : '';
 	}
@@ -217,15 +218,17 @@ class Star_Model_Mysqli_Abstract implements Star_Model_Interface
 		$result = $this->_query($sql);
 		
 		$data = $result->fetch_assoc();
+        
+        $result->free();
 		
-		return $data = $this->deepStripslashes($data);
+		return $data;
 	}
 	
 	public function fetchCol($where, $conditions = null , $table = null)
 	{
 		$data = $this->fetchAll($where, $conditions = null , $table = null);
 		
-		return $this->deepStripslashes($data);
+		return $data;
 	}
     
     public function query($sql)
@@ -236,8 +239,10 @@ class Star_Model_Mysqli_Abstract implements Star_Model_Interface
         
         while ($rs = $result->fetch_assoc())
 		{
-			$data[] = $this->deepStripslashes($rs);
+			$data[] = $rs;
 		}
+        
+        $result->free();
         
         return $data;
     }
@@ -263,7 +268,7 @@ class Star_Model_Mysqli_Abstract implements Star_Model_Interface
         
 		$resource = $this->db->query($sql);
         
-        if (!is_object($resource))
+        if ($resource === false)
         {
             throw new Star_Exception("sql err: ". $sql, 500);
         }
