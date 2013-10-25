@@ -246,32 +246,20 @@ class Star_Application {
      */
 	private function dispatch()
 	{
-		$request = $this->request;
         header('Cache-Control: private');
 		header('Content-Type: text/html; charset=' . $this->view->getEncoding());
 		ob_start();
 
         try{
             require 'Star/Controller/Action.php';
-            $controller_class = $this->loadController($request); //返回controller
-            $controller = new $controller_class($request, $this->view); //实例化controller
-            $action = $request->getAction(); //返回action
+            $controller = $this->loadController(); //实例化controller
+            $action = $this->request->getAction(); //返回action
             $controller->dispatch($action); //执行action
             call_user_func(array('Star_Model_Abstract', 'Close')); //主动关闭数据库链接
         } catch (Exception $e)
         {
             return $this->handleException($e);
         }
-        
-        //开启layout 加载layout
-		if ($controller->layout instanceof Star_Layout && $controller->layout->isEnabled() == true)
-		{
-			$body = ob_get_contents();
-			ob_clean();
-			$this->setLayout($controller->view, $controller->layout, $body);
-		}
-        
-        $this->saveViewCache($controller->view); //存储页面缓存
         
 		ob_end_flush();
 	}
@@ -283,10 +271,10 @@ class Star_Application {
      * @return type
      * @throws Star_Exception 
      */
-    public function loadController($request)
+    public function loadController()
     {
-        $class_name = $request->getController();
-        $file_path = Star_Loader::getFilePath(array($this->getControllerDirectory(), $class_name));
+        $contoller = $this->request->getController();
+        $file_path = Star_Loader::getFilePath(array($this->getControllerDirectory(), $contoller));
 
         if (Star_Loader::isExist($file_path) == false)
         {
@@ -296,33 +284,19 @@ class Star_Application {
         //文件是否可读
         if (!Star_Loader::isReadable($file_path))
         {
-            throw new Star_Exception("Connot load controller calss {$class_name} from file {$file_path}", 500);
+            throw new Star_Exception("Connot load controller calss {$contoller} from file {$file_path}", 500);
         }
         
         require $file_path;
         
         //类是否存在
-        if (!class_exists($class_name, false))
+        if (!class_exists($contoller, false))
         {
-            throw new Star_Exception("Invalid controller class ({$class_name}) from file {$file_path}", 404);
+            throw new Star_Exception("Invalid controller class ({$contoller}) from file {$file_path}", 404);
         }
 
-        return $class_name;
+        return new $contoller($this->request, $this->view);
     }
-	
-    /**
-     * 设置layout
-     * 
-     * @param type $star_view
-     * @param type $star_layout
-     * @param type $body 
-     */
-	public function setLayout($star_view, $star_layout, $body)
-	{
-		$star_layout->setView($star_view);
-		$star_layout->assign($star_layout->getContentKey(), $body);
-		$star_layout->render();
-	}
 	
 	/**
 	 * 设置导入文件目录
@@ -397,20 +371,6 @@ class Star_Application {
     {
         $this->request->setActionKey($action_key);
         return $this;
-    }
-    
-    /**
-     * 保存页面缓存 
-     */
-    protected function saveViewCache(Star_View $view)
-    {
-        //开启缓存，且缓存超时或者缓存不存在，则写入缓存
-        if ($view->isCache() == true && $view->cacheIsExpire() == true)
-        {
-            $view->saveCache(ob_get_contents());
-        }
-        
-        return $view->isCache();
     }
     
     public function handleException($e)

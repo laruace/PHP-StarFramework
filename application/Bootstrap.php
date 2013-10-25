@@ -12,7 +12,6 @@ class Bootstrap extends Star_Application_Bootstrap_Bootstrap
 
 	protected function _initView()
 	{
-        return;
 		Star_Layout::startMvc(array(
 			'base_path' => APPLICATION_PATH . '/layouts',
 			'script_path' => 'default',

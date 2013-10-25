@@ -92,10 +92,53 @@ class Star_Controller_Action implements Star_Controller_Action_Interface{
             $this->$action();
             $this->view->loadView();
             
+            //开启layout 加载layout
+            if ($this->layout instanceof Star_Layout && $this->layout->isEnabled() == true)
+            {
+                $body = ob_get_contents();
+                ob_clean();
+                $this->setLayout($body);
+            }
+
+            //判断是否需要更新缓存
+            if ($this->view->isCache() == true && $this->view->cacheIsExpire() == true)
+            {
+                $this->saveViewCache(); //存储页面缓存
+            }
         } else {
             $this->__call($action, array());
         }
+
     }
+    
+    /**
+     * 保存页面缓存 
+     */
+    private function saveViewCache()
+    {
+        //开启缓存，且缓存超时或者缓存不存在，则写入缓存
+        if ($this->view->isCache() == true && $this->view->cacheIsExpire() == true)
+        {
+            $this->view->saveCache(ob_get_contents());
+        }
+        
+        return $this->view->isCache();
+    }
+    
+    
+    /**
+     * 设置layout
+     * 
+     * @param type $star_view
+     * @param type $star_layout
+     * @param type $body 
+     */
+	private function setLayout($body)
+	{
+		$this->layout->setView($this->view);
+		$this->layout->assign($this->layout->getContentKey(), $body);
+		$this->layout->render();
+	}
 	
     /**
      * 初始化 layout
