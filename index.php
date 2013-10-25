@@ -24,7 +24,6 @@ $application = new Star_Application(
     APPLICATION_PATH . '/configs/application.php',
     realpath(APPLICATION_PATH . '/../library')
 );
-
 $application->bootstrap()->run();
 echo microtime() - $start_time;
 ?>

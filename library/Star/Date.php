@@ -157,6 +157,26 @@ class Star_Date {
         
         return mktime(0, 0, 0, $month, $day, $year);
     }
+    
+    /**
+     * 花费时间转换为时间格式
+     * 
+     * @param type $time 
+     */
+    public static function agoTime($time)
+    {
+        $ago_time = '';
+        if ($time < 3600)
+        {
+            $ago_time = intval($time / 60) . '分钟';
+        } else if ($time < 86400)
+        {
+            $ago_time = intval($time/3600) . '小时' . intval(($time%3600)/60) . 分钟;
+        } else {
+            $ago_time = intval($time/86400) . '天' . intval(($time%86400)/3600) . '小时' . intval(($time%3600)/60) . 分钟;
+        }
+        return $ago_time;
+    }
 }
 
 ?>

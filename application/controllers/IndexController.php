@@ -13,13 +13,14 @@ class IndexController extends Star_Controller_Action
         
         //$user_service = new UserService();
         
-        //$user_service->getUserByPage(1, 10);
+        //$user_service->getUserByPage(1, 10);\
+        /*
         $this->openCache('', 0);
         if ($this->isCache())
         {
             return $this->showCache();
         }
-        
+        */
         //$this->view->assign('title', 'Hello world!');
         
         //$this->view->setJsConfig(array(

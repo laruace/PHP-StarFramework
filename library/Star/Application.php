@@ -153,18 +153,19 @@ class Star_Application {
         
         if (empty($bootstrap_path))
         {
-            throw new Star_Exception('No bootstrap path provided');
+            return ;
+        }
+
+        if (!file_exists($bootstrap_path))
+        {
+            throw new Star_Exception('Not found Bootstrap file:' . $bootstrap_path);
         }
         
-		if ($class === null)
-		{
-			$class = "Bootstrap";
-		}
-		
         require $bootstrap_path;
+        
         if (!class_exists($class, false))
         {
-            throw new Star_Exception('Bootstrap class not found.');
+            throw new Star_Exception('bootstrap object ' . $class . ' not found in:' . $bootstrap_path);
         }
 		
 		$this->bootstrap = new $class($this);
@@ -226,18 +227,15 @@ class Star_Application {
 	
 	public function bootstrap($resource = null)
 	{
-		$this->getBootstrap()->bootstrap($resource);
-		
+        if ($this->bootstrap !=null)
+        {
+            $this->getBootstrap()->bootstrap($resource);
+        }
 		return $this;
 	}
 	
 	public function getBootstrap()
 	{
-		if ($this->bootstrap == null)
-		{
-			$this->bootstrap = new Bootstrap();
-		}
-		
 		return $this->bootstrap;
 	}
 	
