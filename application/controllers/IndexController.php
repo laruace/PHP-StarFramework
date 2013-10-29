@@ -9,21 +9,19 @@ class IndexController extends Star_Controller_Action
 	
 	public function indexAction()
 	{
-        Star_Http_Response::setBrownerCache(600);
+        //Star_Http_Response::setBrownerCache(600);
         
         //$user_service = new UserService();
         
         //$user_service->getUserByPage(1, 10);\
         
-        /*
+/*
         $this->openCache('', 0);
         if ($this->isCache())
         {
             return $this->showCache();
         }
-         * 
-         */
-        
+ */       
         //$this->view->assign('title', 'Hello world!');
         
         //$this->view->setJsConfig(array(

@@ -1,13 +1,8 @@
 <?php
 
-require 'Star/Loader/Loader.php';
-
-require 'Star/Layout/Layout.php';
-
+require 'Star/Loader.php';
+require 'Star/Layout.php';
 require 'Star/Config.php';
-
-require 'Star/Registry.php';
-
 require 'Star/Model/Abstract.php';
 
 class Star_Application {
@@ -76,18 +71,24 @@ class Star_Application {
          * 
          */
         
-        if (is_array($options))
+        if (!empty($options))
         {
             $methods = get_class_methods($this);
-            
+            $methods = array_flip($methods);
             foreach ($options as $key => $option)
             {
                 $method = 'set' . ucfirst($key);
-                if (in_array($method, $methods))
+                if (array_key_exists($method, $methods))
                 {
                     $this->$method($option);
                 }
             }
+        }
+        
+        //配置文件没有配置view, 初始化view
+        if (!isset($options['resources']['view']))
+        {
+            $this->setView(array());
         }
 	}
 	
@@ -202,7 +203,11 @@ class Star_Application {
             $this->setFrontController($options['frontController']);
         }
         
-        $this->setView(isset($options['view']) ? $options['view'] : array());
+        //初始化view
+        if (isset($options['view']))
+        {
+            $this->setView(!empty($options['view']) ? $options['view'] : array());
+        }
         
         //DB配置
 		if (isset($options[Star_Model_Abstract::ADAPTER]) && $options[Star_Model_Abstract::ADAPTER])
@@ -373,13 +378,18 @@ class Star_Application {
         return $this;
     }
     
+    protected function setDisplayException($flag = false)
+    {
+        return $this->display_exceptions = $flag;
+    }
+
     public function handleException($e)
     {
         if ($e->getCode() == 404)
         {
             return header('Location: /404.html');
         }
-        
+
         if ($this->display_exceptions == true)
         {
             echo $e->__toString();

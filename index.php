@@ -1,4 +1,5 @@
 <?php
+$memory = memory_get_usage();
 $start_time = microtime();
 // Define path to application directory
 defined('APPLICATION_PATH')
@@ -25,5 +26,6 @@ $application = new Star_Application(
     realpath(APPLICATION_PATH . '/../library')
 );
 $application->bootstrap()->run();
-echo microtime() - $start_time;
+echo microtime() - $start_time . "<br />";
+echo memory_get_usage() - $memory;
 ?>

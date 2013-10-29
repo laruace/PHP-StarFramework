@@ -8,14 +8,17 @@ return array(
             'class' => 'Bootstrap',
 
         ),
+        //'displayException' => true,
         'resources' => array(
             'frontController' => array(
                 'params' => array(
-                    'displayExceptions' => 0,
+                    
                 ),
                 'controllerDirectory' => APPLICATION_PATH . "/controllers",
             ),
-            
+            'view' => array(
+                //'theme' => 'new'
+            ),
 
         ),
     ),

@@ -31,7 +31,6 @@ class Bootstrap extends Star_Application_Bootstrap_Bootstrap
     protected function _initConfig()
 	{
         return ;
-		Star_Registry::set('ddd', 123);
 	}
 	
 }

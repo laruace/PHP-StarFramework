@@ -45,19 +45,18 @@ class Star_Config {
 	 */
 	public function loadConfig()
 	{
-        
-		$options = $this->config->parseConfig();
-        
-        self::$options = $options;
-        
-        Star_Registry::set('config', $options);
-        
-		return (array) $options;
+        if (empty(self::$options))
+        {
+            $options = $this->config->parseConfig();
+
+            self::$options = (array) $options;
+        }
+		return self::$options;
 	}
 	
     public static function get($key = null)
     {
-        return isset(self::$options[$key]) ? self::$options[$key] : '';
+        return isset(self::$options[$key]) ? self::$options[$key] : self::$options;
     }
 }
 

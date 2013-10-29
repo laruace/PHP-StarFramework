@@ -133,7 +133,7 @@ abstract class Star_View_Abstract {
 	private function getViewPath()
 	{
         $view_segments = array($this->_base_name, $this->_theme_name);
-  
+
 		if ($this->_is_controller == true)
 		{           
             array_push($view_segments, $this->_controller);
