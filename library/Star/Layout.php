@@ -103,15 +103,20 @@ class Star_Layout {
 	 */
 	public function setOptions($options)
 	{
-		if (!empty($options['script_path']))
+		if (isset($options['script_path']) && !empty($options['script_path']))
 		{
 			$this->layout_script_path = $options['script_path'];
 		}
 		
-		if (!empty($options['base_path']))
+		if (isset($options['base_path']) && !empty($options['base_path']))
 		{
 			$this->layout_base_path = $options['base_path'];
 		}
+        
+        if (isset($options['layout']) && !empty($options['layout']))
+        {
+            $this->layout = $options['layout'];
+        }
 	}
 	
 	public function setScriptPath($script_path)

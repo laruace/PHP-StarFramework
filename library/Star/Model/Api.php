@@ -106,7 +106,9 @@ Class Star_Model_Api
 	        	'info' => $info,
 	        );
             
-            Star_Log::log($message, 'query_error');
+            $stact_trace = Star_Debug::Trace(); //返回堆栈详细信息
+            $stact_trace = implode("\n", $stact_trace);
+            Star_Log::log($url . "?" . $query_string . "\n" . $err . "\n" . $stact_trace, 'query_error');
             
             return ;
 	    }
@@ -128,7 +130,7 @@ Class Star_Model_Api
 			return $params;
 			
 		$query_string = array();
-	    foreach ($params as $key => $value)
+	    foreach ((array) $params as $key => $value)
 	    {   
 	        array_push($query_string, rawurlencode($key) . '=' . rawurlencode($value));
 	    }   
@@ -176,8 +178,8 @@ Class Star_Model_Api
     {
         if (empty($this->server_name))
         {
-            $config = Star_Registry::get('config');
-            $this->server_name = $config['resources']['api']['server_name'];
+            $resources_config = Star_Config::get('resources');
+            $this->server_name = $resources_config['api']['server_name'];
         }
 
         return $this->server_name;

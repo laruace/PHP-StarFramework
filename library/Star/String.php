@@ -91,6 +91,17 @@ class Star_String {
 		
 		return $data;
 	}
+    
+    /**
+     * 返回数字
+     * 
+     * @param type $number
+     * @return type 
+     */
+    public static function numeric($number)
+    {
+        return preg_replace('/[^0-9]/', '', $number);
+    }
 }
 
 ?>

@@ -65,7 +65,18 @@ class Star_Date {
     {
         return date('Ym', $time);
     }
-
+    
+    /**
+     * 返年月日
+     * 
+     * @param type $time
+     * @return type 
+     */
+    public static function getDate($time)
+    {
+        return date('Ymd', $time);
+    }
+    
     /**
      * 返回上周起始时间戳
      * 
@@ -151,7 +162,7 @@ class Star_Date {
      * 
      * @return type 
      */
-    public static function getThisDay()
+    public static function getToday()
     {
         list($year, $month, $day) = explode('-', date('Y-m-d', time()));
         

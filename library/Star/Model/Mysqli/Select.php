@@ -207,7 +207,7 @@ class Star_Model_Mysqli_Select implements Star_Model_Select_Interface
 	
 	public function limitPage($page, $page_number)
 	{
-		$page        = ($page < 0) ? 1 : $page;
+		$page        = ($page <= 0) ? 1 : $page;
 		$page_number = ($page_number < 0) ? 1 : $page_number;
 		$offset      = ($page - 1) * $page_number;
 		$this->_limit_page = compact('page_number', 'offset');
