@@ -51,7 +51,7 @@ Class Star_Model_Api
      * @param type $protocol
      * @return type 
      */
-    public function api($script_name, $params, $method = 'get', $cookie = array(), $protocol = 'http')
+    public function api($script_name, $params, $method = 'get', $cookie = array(), $protocol = 'http', $timeout = 30)
     {
         $query_string = $this->getQueryString($params);
         
@@ -79,7 +79,7 @@ Class Star_Model_Api
         
 	    curl_setopt($ch, CURLOPT_HEADER, false);
 	    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-	    curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 3);
+	    curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
 
         // disable 100-continue
         curl_setopt($ch, CURLOPT_HTTPHEADER, array('Expect:'));
