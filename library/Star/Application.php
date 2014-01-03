@@ -7,18 +7,26 @@ require 'Star/Model/Abstract.php';
 
 class Star_Application {
 
-    protected $display_exceptions = false;
+    protected $display_exceptions = false; //是否显示异常 开发测试环境打开方便调试
 
-    private $request;
+    private $request; //star_request类
 	
-	protected $application_path;
+	protected $application_path; //app路径
     
-    protected $controller_directory;
+    protected $controller_directory; //应用controller路径
 
-    protected $view;
+    protected $view; //star_view类
 	
-	protected $bootstrap = null;
+	protected $bootstrap = null; //应用boostrap
 	
+    /**
+     * 构造方法
+     * 
+     * @param type $application_env 配置变量
+     * @param type $application_path app路径
+     * @param type $config_file 配置文件路径
+     * @param type $star_path  框架路径
+     */
 	public function __construct($application_env, $application_path, $config_file, $star_path = '')
 	{
 		$this->application_path = $application_path;
@@ -92,6 +100,12 @@ class Star_Application {
         }
 	}
 	
+    /**
+     * 设置controller配置
+     * 
+     * @param type $options
+     * @return \Star_Application 
+     */
     protected function setFrontController($options)
     {
         if (isset($options['controllerDirectory']) && !empty($options['controllerDirectory']))
@@ -107,6 +121,12 @@ class Star_Application {
         return $this;
     }
     
+    /**
+     * 设置controller目录
+     * 
+     * @param type $path
+     * @return \Star_Application 
+     */
     public function setControllerDirectory($path)
     {
         $this->controller_directory = $path;
@@ -114,6 +134,11 @@ class Star_Application {
         return $this;
     }
     
+    /**
+     * 返回controller目录
+     * 
+     * @return type 
+     */
     public function getControllerDirectory()
     {
         if ($this->controller_directory == null)
@@ -230,6 +255,12 @@ class Star_Application {
 		}
 	}
 	
+    /**
+     * 执行bootstrap
+     * 
+     * @param type $resource
+     * @return \Star_Application 
+     */
 	public function bootstrap($resource = null)
 	{
         if ($this->bootstrap !=null)
@@ -239,13 +270,18 @@ class Star_Application {
 		return $this;
 	}
 	
+    /**
+     * 返回bootstrap
+     * 
+     * @return type 
+     */
 	public function getBootstrap()
 	{
 		return $this->bootstrap;
 	}
 	
     /**
-     * 分发
+     * 消息派遣 调用控制器
      * 
      * @return type 
      */
@@ -355,7 +391,7 @@ class Star_Application {
     }
     
     /**
-     * 设置默认action_name
+     * 设置默认action_name 初始是Action
      * 
      * @param type $action_name
      * @return \Star_Application 
@@ -366,23 +402,47 @@ class Star_Application {
         return $this;
     }
     
+    /**
+     * 设置controllerKey 初始是Controller
+     * 
+     * @param type $controller_key
+     * @return \Star_Application 
+     */
     public function setControllerKey($controller_key)
     {
         $this->request->setControllerKey($controller_key);
         return $this;
     }
     
+    /**
+     * 设置actionKey 初始是Action
+     * 
+     * @param type $action_key
+     * @return \Star_Application 
+     */
     public function setActionKey($action_key)
     {
         $this->request->setActionKey($action_key);
         return $this;
     }
     
+    /**
+     * 是否显示异常
+     * 
+     * @param type $flag
+     * @return type 
+     */
     protected function setDisplayException($flag = false)
     {
         return $this->display_exceptions = $flag;
     }
 
+    /**
+     * 处理异常
+     * 
+     * @param type $e
+     * @return type 
+     */
     public function handleException($e)
     {
         if ($e->getCode() == 404)
@@ -394,7 +454,7 @@ class Star_Application {
         {
             echo $e->__toString();
         }else{
-            call_user_func(array('Star_log', 'log'), $e->__toString());
+            call_user_func(array('Star_Log', 'log'), $e->__toString());
         }
         
         if ($e->getCode() == 500)

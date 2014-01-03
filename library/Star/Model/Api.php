@@ -57,7 +57,12 @@ Class Star_Model_Api
         
         $cookie_string = $this->getCookieString($cookie);
         
-        $url = $protocol . "://" . $this->getServerName() . $script_name;
+        if (strcmp($protocol . "://", substr($script_name, 0, strlen($protocol . "://"))) !== 0)
+        {
+            $url = $protocol . "://" . $this->getServerName() . $script_name;
+        } else {
+            $url = $script_name;
+        }
         
         $ch = curl_init();
 

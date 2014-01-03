@@ -113,6 +113,7 @@ class Star_Model_Mysqli_Select implements Star_Model_Select_Interface
 	
 	protected function setTable($table, $is_join=true)
 	{
+        $alias = '';
 		if (preg_match('/^(.+)\s+' . self::SQL_AS . '\s+(.+)$/i', $table, $buffer))
 		{
 			$table_name = $buffer[1];

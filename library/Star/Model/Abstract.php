@@ -61,10 +61,16 @@ abstract class Star_Model_Abstract
 	
 	protected function getSlaveDbOption()
 	{
+        $option = array();
 		$config = self::$_config;
+        
+        if (!isset($config[self::SLAVE_ADAPTER]))
+        {
+            return $option;
+        }
 		
 		$slave_options = $config[self::SLAVE_ADAPTER];
-		$option = array();
+		
 		
 		if ($config[self::ADAPTER]['multi_slave_db'] == true && !empty($slave_options))
 		{

@@ -585,6 +585,19 @@ abstract class Star_View_Abstract {
         return $path;
     }
     
+    /**
+     * 异步返回， 提前返回数据给前端，继续执行后面逻辑 
+     */
+    public function anynReturn()
+    {
+        if (function_exists('fastcgi_finish_request'))
+        {
+            ob_end_flush();
+            fastcgi_finish_request();
+            ob_start();
+        }
+    }
+    
     public function __set($name, $value) {
         $this->data[$name] = $value;
     }

@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * 缓存
+ * 缓存类
  *
  * @author zhangqy
  *
@@ -28,7 +28,8 @@ class Star_Cache {
 	}
 	
     /**
-     *    
+     *  工厂方法  
+     * 
      * @param array $config
      * @return type
      * @throws Star_Exception 
