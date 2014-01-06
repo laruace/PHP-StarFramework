@@ -41,13 +41,24 @@ class Star_Http_Request extends Star_Http_Abstract
 	{
 		$uri = '';
 		
-		if (isset($_SERVER['REDIRECT_URL']) && $_SERVER['REDIRECT_URL'])
+		if (isset($_SERVER['REDIRECT_URL']) && $_SERVER['REDIRECT_URL']) //是否重定向
 		{
 			$uri = $_SERVER['REDIRECT_URL'];
+            if ($_SERVER['DOCUMENT_ROOT'] != dirname($_SERVER['SCRIPT_FILENAME'])) 
+            {
+                $uri = str_replace(str_replace($_SERVER['DOCUMENT_ROOT'], '', dirname($_SERVER['SCRIPT_FILENAME'])) , '', $uri); //去除目录路径
+            }
+            
 		} else if ($_SERVER['REQUEST_URI'])
 		{
             $url_info = parse_url($_SERVER['REQUEST_URI']);
-			$uri = ltrim(str_replace($_SERVER['SCRIPT_NAME'], '', $url_info['path']), '\\/');
+            if ($_SERVER['PHP_SELF'] == $url_info['path'])
+            {
+                $uri = str_replace($_SERVER['SCRIPT_NAME'], '', $url_info['path']);
+            } else {
+                $uri = str_replace(str_replace($_SERVER['DOCUMENT_ROOT'], '', dirname($_SERVER['SCRIPT_FILENAME'])) , '', $url_info['path']); //去除目录路径
+            }
+            $uri = ltrim($uri, '\\/');
 		}
 
 		return $uri;
