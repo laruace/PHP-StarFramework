@@ -39,7 +39,7 @@ abstract class Star_Model_Abstract
 			$this->setOptions($config);
 		}
 		
-		$this->_setup();
+		//$this->_setup();
 	}
 	
 	private function _setup()
@@ -90,7 +90,7 @@ abstract class Star_Model_Abstract
 	 */
 	public function insert(array $data)
 	{
-		return  self::$_default_db->insert($this->getTableName(), $data);
+		return $this->getDefaultAdapter()->insert($this->getTableName(), $data);
 	}
 
 	/**
@@ -103,7 +103,7 @@ abstract class Star_Model_Abstract
 	{
 		$where = $this->setWhere($where);
 		
-		return self::$_default_db->update($this->getTableName(), $where, $data, $quote_indentifier);
+		return $this->getDefaultAdapter()>update($this->getTableName(), $where, $data, $quote_indentifier);
 	}
 	
 	/**
@@ -115,12 +115,12 @@ abstract class Star_Model_Abstract
 	{
 		$where = $this->setWhere($where);
 		
-		return self::$_default_db->delete($this->getTableName(), $where);
+		return $this->getDefaultAdapter()->delete($this->getTableName(), $where);
 	}
 	
 	public function query($sql)
 	{
-		return self::$_db->query($sql);
+		return $this->getAdapter()->query($sql);
 	}
     
     /**
@@ -133,7 +133,7 @@ abstract class Star_Model_Abstract
     {
         $where = $this->setWhere($pk_id);
         
-        return self::$_db->fetchRow($where, '*', $this->getTableName());
+        return $this->getAdapter()->fetchRow($where, '*', $this->getTableName());
     }
 	
     /**
@@ -143,22 +143,22 @@ abstract class Star_Model_Abstract
      */
 	public function fetchOne($where)
 	{
-		return self::$_db->fetchOne($where);
+		return $this->getAdapter()->fetchOne($where);
 	}
 	
 	public function fetchAll($where)
 	{
-		return self::$_db->fetchAll($where);
+		return $this->getAdapter()->fetchAll($where);
 	}
 	
 	public function fetchRow($where)
 	{
-		return self::$_db->fetchRow($where);
+		return $this->getAdapter()->fetchRow($where);
 	}
 	
 	public function fetchCol($where)
 	{
-		$rs = self::$_db->fetchAll($where);
+		$rs = $this->getAdapter()->fetchAll($where);
 		
 		$data = array();
 
@@ -175,7 +175,7 @@ abstract class Star_Model_Abstract
 	
 	public function select()
 	{ 
-		return self::$_db->select();
+		return $this->getAdapter()->select();
 	}
 	
 	/**
@@ -236,6 +236,11 @@ abstract class Star_Model_Abstract
 	
 	public function getAdapter()
 	{
+        if (self::$_db == null)
+        {
+            $this->_setup();
+        }
+        
 		return self::$_db;
 	}
 	
@@ -264,7 +269,12 @@ abstract class Star_Model_Abstract
 	
 	public function getDefaultAdapter($config = null)
 	{
-		return self::$_default_db;
+        if (self::$_default_db == null)
+        {
+            $this->_setup();
+        }
+        
+		return self::$_default_db; 
 	}
 	
 	/**
