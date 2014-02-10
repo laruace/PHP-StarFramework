@@ -23,7 +23,7 @@ class Star_Cache_Memcache implements Star_Cache_Interface {
 			}
 		} else
 		{
-			$this->memcache->addServer($config['server']['host'], $config['server']['host']);
+			$this->memcache->addServer($config['host'], $config['port']);
 		}
 	}
 	

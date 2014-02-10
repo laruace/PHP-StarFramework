@@ -25,7 +25,7 @@ class Star_Cache_Memcached implements Star_Cache_Interface {
 			$this->memcached->setOption(Memcached::OPT_HASH, Memcached::HASH_CRC);
 		} else
 		{
-			$this->memcached->addServer($config['server']['host'], $config['server']['host']);
+			$this->memcached->addServer($config['host'], $config['port']);
 		}
 	}
 	

@@ -103,7 +103,7 @@ abstract class Star_Model_Abstract
 	{
 		$where = $this->setWhere($where);
 		
-		return $this->getDefaultAdapter()>update($this->getTableName(), $where, $data, $quote_indentifier);
+		return $this->getDefaultAdapter()->update($this->getTableName(), $where, $data, $quote_indentifier);
 	}
 	
 	/**

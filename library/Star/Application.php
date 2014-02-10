@@ -239,6 +239,12 @@ class Star_Application {
 		{
             call_user_func(array('Star_Model_Abstract', 'setting'), $options);
 		}
+        
+        //初始化缓存
+        if (isset($options['cache']))
+        {
+            $this->setCache($options['cache']);
+        }
 	}
 	
     /**
