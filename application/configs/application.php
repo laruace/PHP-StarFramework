@@ -18,6 +18,7 @@ return array(
             ),
             'view' => array(
                 //'theme' => 'new'
+                //'display' => false,
             ),
 
         ),

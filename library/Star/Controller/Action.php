@@ -234,7 +234,7 @@ class Star_Controller_Action implements Star_Controller_Action_Interface{
         $this->disableLayout();
         $this->view->setNoRender();
         
-		return json_encode($message);
+		echo json_encode($message);
 	}
     
     protected function setNoRender()

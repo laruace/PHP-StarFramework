@@ -25,13 +25,13 @@ class Star_Application {
      * @param type $application_env 配置变量
      * @param type $application_path app路径
      * @param type $config_file 配置文件路径
-     * @param type $star_path  框架路径
+     * @param type $library_path  类库路径
      */
-	public function __construct($application_env, $application_path, $config_file, $star_path = '')
+	public function __construct($application_env, $application_path, $config_file, $library_path = '')
 	{
 		$this->application_path = $application_path;
-		
-		$this->setAutoload($star_path);
+
+		$this->setAutoload($library_path);
         
 		$star_config = new Star_Config($config_file, $application_env);
 		$options = $star_config->loadConfig();
@@ -366,10 +366,10 @@ class Star_Application {
 	/**
 	 * 设置自动加载
 	 */
-	public function setAutoload($star_path)
+	public function setAutoload($library_path)
 	{
 		$star_autoload = new Star_Loader();
-		$star_autoload->setApplicationPath($this->application_path)->setStarPath($star_path);
+		$star_autoload->setApplicationPath($this->application_path)->setLibraryPath($library_path);
 		spl_autoload_register(array('Star_Loader', 'autoload'));
 		return $this;
 	}

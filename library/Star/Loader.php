@@ -11,7 +11,7 @@ class Star_Loader {
 
 	protected static $app_path = null;
 	
-	protected static $frameword_path = null;
+	protected static $library_path = null;
     
     protected static $autoload_types = array(
 		'service' => 'services',
@@ -131,6 +131,14 @@ class Star_Loader {
 				}
 			}
 		}
+        
+        $library_class_path = self::getFilePath(array(self::$library_path, $class_name));
+        //library目录下，则自动加载
+        if (file_exists($library_class_path))
+        {
+            require $library_class_path;
+            return ;
+        }
 	}
 	
     /**
@@ -148,13 +156,13 @@ class Star_Loader {
 			return false;
 		}
 		
-		$star_path = self::getStarPath(); //返回Star框架路径
+		$library_path = self::getLibraryPath(); //返回Star框架路径
 
 		$class_path = self::getFilePath($segments); //返回类路径
 	
-		if (!empty($star_path))
+		if (!empty($library_path))
 		{
-			$file_path = self::getDirPath(array($star_path, $class_path));
+			$file_path = self::getDirPath(array($library_path, $class_path));
 		} else
 		{
 			$file_path = $class_path;
@@ -195,19 +203,19 @@ class Star_Loader {
 		}
 	}
 	
-	public function setStarPath($path)
+	public function setLibraryPath($path)
 	{
 		if (!empty($path))
 		{
-			self::$frameword_path = $path;
+			self::$library_path = $path;
 		}
 		
 		return $this;
 	}
 	
-	public function getStarPath()
+	public function getLibraryPath()
 	{
-		return self::$frameword_path;
+		return self::$library_path;
 	}
     
     public static function isExist($file_path)
