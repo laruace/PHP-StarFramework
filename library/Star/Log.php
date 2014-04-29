@@ -13,6 +13,7 @@ class Star_Log {
     
     private static $model = 'a+';
 
+    protected static $file_path = '';
 
     public function __construct() {
         
@@ -32,15 +33,21 @@ class Star_Log {
         $file_name = "{$type}_" . date('Ymd', $now);
         
         $message = "\n{$time}:  {$message}";
-        
-        $directory = Star_Loader::getModuleDirect(self::$directory_name);
-        
-        if (!is_dir($directory))
+
+        if (self::$file_path)
         {
-            mkdir($directory, 0775, true);
-        }
+            $file_path = Star_Loader::getFilePath(array(self::$file_path,  $file_name), '.txt');
+        } else
+        {
+            $directory = Star_Loader::getModuleDirect(self::$directory_name);
         
-        $file_path = Star_Loader::getFilePath(array($directory,  $file_name), '.txt');
+            if (!is_dir($directory))
+            {
+                mkdir($directory, 0775, true);
+            }
+            
+            $file_path = Star_Loader::getFilePath(array($directory,  $file_name), '.txt');
+        }
 
         $handle = fopen($file_path, self::$model, false);
         
@@ -54,9 +61,14 @@ class Star_Log {
      * 
      * @param type $directory_name 
      */
-    public static function setLogDirectory($directory_name)
+    public static function setLogDirectoryName($directory_name)
     {
         self::$log_directory = $directory_name;
+    }
+    
+    public static function setLogFilePath($file_path)
+    {
+        self::$file_path = $file_path;
     }
 }
 
