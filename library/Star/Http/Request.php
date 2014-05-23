@@ -1,20 +1,29 @@
 <?php
+/**
+ * @package library\Star\Http
+ */
+
+/**
+ * 导入文件
+ */
+require 'Star/Http/Abstract.php';
 
 /**
  * request 类
- *
+ * 
+ * @package library\Star\Http
  * @author zhangqy
  *
  */
-
-require 'Star/Http/Abstract.php';
-
 class Star_Http_Request extends Star_Http_Abstract
 {
     protected $params = array();
 
     protected $url_delimiter = '/';
     
+    /**
+     * 构造方法
+     */
     public function __construct()
 	{
 		$this->params = $_REQUEST;
@@ -37,6 +46,10 @@ class Star_Http_Request extends Star_Http_Abstract
 		return false;
 	}
 	
+	/**
+	 * 获取request的访问地址
+	 * @return Ambigous <string, unknown, mixed>
+	 */
 	protected function getUri()
 	{
 		$uri = '';
@@ -173,7 +186,17 @@ class Star_Http_Request extends Star_Http_Abstract
         return $realip;
     }
     
-	
+    /**
+     * 返回用户浏览器信息
+     * 
+     * @return type 
+     */
+    public static function getHttpAgent()
+    {
+        return $_SERVER['HTTP_USER_AGENT'];
+    }
+
+
     /**
      * 解析访问URL
      * 

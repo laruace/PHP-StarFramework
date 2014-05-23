@@ -1,12 +1,15 @@
 <?php
+/**
+ * @package library\Star
+ */
 
 /**
  * 加载类
  *
+ * @package library\Star
  * @author zhangqy
  *
  */
-
 class Star_Loader {
 
 	protected static $app_path = null;

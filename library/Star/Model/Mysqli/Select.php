@@ -1,7 +1,20 @@
 <?php 
+/**
+ * @package library\Star\Model\Mysqli
+ */
 
+/**
+ * 导入文件
+ */
 require_once 'Star/Model/Select/Interface.php';
 
+/**
+ * 数据库操作类
+ * 
+ * @package library\Star\Model\Mysqli
+ * @author zhangqy
+ *
+ */
 class Star_Model_Mysqli_Select implements Star_Model_Select_Interface
 {
 	protected $_table;
@@ -72,6 +85,7 @@ class Star_Model_Mysqli_Select implements Star_Model_Select_Interface
 	
 	/**
 	 * 添加一个where条件
+	 * 
 	 * @param string $conditions
 	 * @param array or string $value
 	 * @return Mysql_Select object
@@ -97,13 +111,22 @@ class Star_Model_Mysqli_Select implements Star_Model_Select_Interface
 	{
 		return addslashes($value);
 	}
-	
+	/**
+	 * 添加一个where 中的or语句
+	 * @see Star_Model_Select_Interface::orWhere()
+	 */
 	public function orWhere($conditions, $value = null)
 	{
 		$this->setWhere($conditions, $value, self::SQL_OR);
 		return $this;
 	}
 	
+
+	/**
+	 * 设置所要查询的表与字段
+	 * @param $table
+	 * @param $columns
+	 */
 	public function from($table, $columns = '*')
 	{
 		$this->setTable($table, false);
@@ -152,18 +175,36 @@ class Star_Model_Mysqli_Select implements Star_Model_Select_Interface
 		return empty($alias) ? $table_name : $alias;
 	}
 	
+	/**
+	 * 左外连接表
+	 * @param $table 所要外连的表
+	 * @param $conditions 查询条件
+	 * @param $columns 查询字段
+	 */
 	public function joinLeft($table, $conditions, $columns)
 	{
 		$this->setJoin(self::SQL_LEFT_JOIN, $table, $conditions, $columns);
 		return $this;
 	}
 	
+	/**
+	 * 右外连接
+	 * @param $table 所要外连的表
+	 * @param $conditions 查询条件
+	 * @param $columns 查询字段
+	 */
 	public function joinRight($table, $conditions, $columns)
 	{
 		$this->setJoin(self::SQL_RIGHT_JOIN, $table, $conditions, $columns);
 		return $this;
 	}
 	
+	/**
+	 * 内连接
+	 * @param $table 所要外连的表
+	 * @param $conditions 查询条件
+	 * @param $columns 查询字段
+	 */
 	public function joinInner($table, $conditions, $columns)
 	{
 		$this->setJoin(self::SQL_INNER_JOIN, $table, $conditions, $columns);
@@ -179,12 +220,21 @@ class Star_Model_Mysqli_Select implements Star_Model_Select_Interface
 		$this->_join[] = array($join_type, $table_name, $alias, self::SQL_ON, $conditions);
 	}
 	
+	/**
+	 * 设置having子句
+	 * @param $spec 包含值
+	 */
 	public function having($spec)
 	{
 		$this->setHaving($spec, self::SQL_AND);
 		return $this;
 	}
 	
+	/**
+	 * 设置having子句  or条件
+	 * @param unknown $spec
+	 * @return Star_Model_Mysqli_Select
+	 */
 	public function orHaving($spec)
 	{
 		$this->setHaving($spec, self::SQL_OR);
@@ -200,12 +250,21 @@ class Star_Model_Mysqli_Select implements Star_Model_Select_Interface
 		}
 	}
 	
+	/**
+	 * 设计记录获取条数
+	 * @param $number 所要获取的记录条数
+	 */
 	public function limit($number)
 	{
 		$this->_limit = $number;
 		return $this;
 	}
 	
+	/**
+	 * 分页查询
+	 * @param $page           
+	 * @param $page_number
+	 */
 	public function limitPage($page, $page_number)
 	{
 		$page        = ($page <= 0) ? 1 : $page;
@@ -215,6 +274,10 @@ class Star_Model_Mysqli_Select implements Star_Model_Select_Interface
 		return $this;
 	}
 	
+	/**
+	 * 添加分组查询条件
+	 * @param $spec 分组字段  
+	 */
 	public function group($spec)
 	{
 		if (is_string($spec))
@@ -225,6 +288,10 @@ class Star_Model_Mysqli_Select implements Star_Model_Select_Interface
 		return $this;
 	}
 	
+	/**
+	 * 设置排序条件
+	 * @param $spec 排序字段  
+	 */
 	public function order($spec)
 	{
 		$spec = is_string($spec) ? array($spec) : $spec;
@@ -242,16 +309,31 @@ class Star_Model_Mysqli_Select implements Star_Model_Select_Interface
 		return $this;
 	}
 	
+	/**
+	 * 查询
+	 * @param unknown $sql
+	 * @return string
+	 */
 	protected function renderSelect($sql)
 	{
 		return $sql = self::SQL_SELET;
 	}
 	
+	/**
+	 * 查询字段
+	 * @param unknown $sql
+	 * @return string
+	 */
 	protected function renderColumns($sql)
 	{
 		return $sql .= implode(', ', $this->_column);
 	}
 	
+	/**
+	 * 查询添加form
+	 * @param unknown $sql
+	 * @return string
+	 */
 	protected function renderFrom($sql)
 	{
 		$sql .= self::SQL_FROM . ' ';
@@ -322,6 +404,9 @@ class Star_Model_Mysqli_Select implements Star_Model_Select_Interface
 		return $sql;
 	}
 	
+	/**
+	 * 整合整句sql
+	 */
 	public function assemble()
 	{
 		$sql = '';

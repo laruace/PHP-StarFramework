@@ -1,12 +1,18 @@
 <?php
 /**
- * controller 基础类
- * 
- * @author zhangqinyang
+ * @package library\Star\Controller
  */
-
+/**
+ * 导入文件
+ */
 require 'Star/Controller/Action/Interface.php';
 
+/**
+ * controller 基础类
+ * 
+ * @package library\Star\Controller
+ * @author zhangqinyang
+ */
 class Star_Controller_Action implements Star_Controller_Action_Interface{
 
 	protected $request;
@@ -16,8 +22,13 @@ class Star_Controller_Action implements Star_Controller_Action_Interface{
 	public $view;
 	
 	public $layout;
-	
-	final public function __construct(Star_Http_Request $request, Star_View $view)
+    
+    protected static $_message_script = 'message';
+    
+    protected static $_warning_script = 'warning';
+
+
+    final public function __construct(Star_Http_Request $request, Star_View $view)
 	{
 		$this->setRequest($request);
         $this->initView($view);
@@ -48,6 +59,12 @@ class Star_Controller_Action implements Star_Controller_Action_Interface{
 		return $this;
 	}
 	
+	/**
+	 * 呼叫控制器
+	 * @param unknown $method_name
+	 * @param unknown $args
+	 * @throws Star_Exception
+	 */
 	public function __call($method_name, $args)
 	{
 		if (substr($method_name, (strlen($this->request->getActionKey()) * -1)) == ucfirst($this->request->getActionKey()))
@@ -202,7 +219,8 @@ class Star_Controller_Action implements Star_Controller_Action_Interface{
 	{
 		$args = func_get_args();
 		$this->view->message = $args[0];
-		return $this->render('message', false);
+        $this->view->url = $args[1];
+		return $this->render(self::$_message_script, false);
 	}
 	
     /**
@@ -214,7 +232,8 @@ class Star_Controller_Action implements Star_Controller_Action_Interface{
 	{
 		$args = func_get_args();
 		$this->view->message = $args[0];
-		return $this->render('message', false);
+        $this->view->url = $args[1];
+		return $this->render(self::$_warning_script, false);
 	}
 	
     /**
@@ -226,9 +245,9 @@ class Star_Controller_Action implements Star_Controller_Action_Interface{
 	{   
 		$args = func_get_args();
 		$message = array(
-			'status' => (bool) $args[0],
-			'message' => $args[1],
-			'data' => $args[2]
+			'err' => (bool) $args[0],
+			'message' => $args[2],
+			'data' => $args[1]
 		);
 
         $this->disableLayout();
@@ -237,6 +256,9 @@ class Star_Controller_Action implements Star_Controller_Action_Interface{
 		echo json_encode($message);
 	}
     
+	/**
+	 * 设置不显示底层
+	 */
     protected function setNoRender()
     {
         $this->view->setNoRender();
@@ -244,6 +266,10 @@ class Star_Controller_Action implements Star_Controller_Action_Interface{
         $this->disableLayout();
     }
     
+    /**
+     * 获取请求信息
+     * @return Star_Http_Request
+     */
     protected function getRequest()
     {
         return $this->request;
@@ -283,6 +309,26 @@ class Star_Controller_Action implements Star_Controller_Action_Interface{
     protected function flushCache()
     {
         $this->view->flushCache();
+    }
+    
+    /**
+     * 设置消息script
+     * 
+     * @param type $script 
+     */
+    public static function setMessageScript($script)
+    {
+        self::$_message_script = $script;
+    }
+    
+    /**
+     * 设置警告script
+     * 
+     * @param type $script 
+     */
+    public static function setWarningScript($script)
+    {
+        self::$_warning_script = $script;
     }
 }
 

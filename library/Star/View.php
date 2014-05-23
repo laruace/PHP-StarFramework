@@ -1,21 +1,36 @@
 <?php
 /**
+ * @package library\Star
+ */
+
+/**
+ * 导入文件
+ */
+require 'Star/View/Abstract.php';
+
+/**
  * Start_view
  *
+ * @package library\Star
  * @author zhangqy
  *
  */
-
-require 'Star/View/Abstract.php';
-
 class Star_View extends Star_View_Abstract{
 	
-	
+	/**
+	 * 构造方法
+	 * @param string $application_path
+	 * @param unknown $options
+	 */
 	public function __construct($application_path = '', $options = array())
 	{
 		parent::__construct($application_path, $options);
 	}
 	
+	/**
+	 * 
+	 * @see Star_View_Abstract::run()
+	 */
 	protected function run()
 	{
         if ($this->getBasePath() == null)

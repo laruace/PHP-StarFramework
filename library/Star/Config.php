@@ -1,13 +1,16 @@
 <?php
 /**
+ * @package library\Star
+ */
+
+/**
  *
  * 配置文件类
  *
+ * @package library\Star
  * @author zhangqy
  *
  */
-
-
 class Star_Config {
 	
 	protected $file_name;
@@ -18,6 +21,11 @@ class Star_Config {
     
     protected static $options = array();
 
+    /**
+     * 构造方法
+     * @param unknown $file_name
+     * @param string $environment
+     */
     public function __construct($file_name, $environment = '')
 	{
 		$this->file_name = $file_name;
@@ -27,6 +35,11 @@ class Star_Config {
 		$this->init($file_name, $environment);
 	}
 	
+	/**
+	 * 初始化
+	 * @param unknown $file_name
+	 * @param unknown $environment
+	 */
 	protected function init($file_name, $environment)
 	{
         $config_type = ucfirst(array_pop(explode('.', $file_name)));
@@ -54,6 +67,11 @@ class Star_Config {
 		return self::$options;
 	}
 	
+	/**
+	 * 获取配置项
+	 * @param string $key
+	 * @return multitype:
+	 */
     public static function get($key = null)
     {
         return isset(self::$options[$key]) ? self::$options[$key] : self::$options;

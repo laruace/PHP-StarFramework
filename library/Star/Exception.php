@@ -1,8 +1,12 @@
 <?php
+/**
+ * @package library\Star
+ */
 
 /**
- *
- *
+ * 异常基类
+ * 
+ * @package library\Star
  * @author zhangqy
  *
  */

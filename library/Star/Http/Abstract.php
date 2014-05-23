@@ -1,12 +1,15 @@
 <?php
+/**
+ * @package library\Star\Http
+ */
 
 /**
  * http抽象类
- *
+ * 
+ * @package library\Star\Http
  * @author zhangqy
  *
  */
-
 abstract class Star_Http_Abstract
 {
 	protected $controller_name = '';

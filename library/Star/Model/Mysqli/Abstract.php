@@ -1,8 +1,21 @@
 <?php
+/**
+ * @package library\Star\Model\Mysqli
+ */
 
+/**
+ * 导入文件
+ */
 require_once 'Star/Model/Interface.php';
 require_once 'Star/Model/Mysqli/Select.php';
 
+/**
+ * 数据模型 基类
+ * 
+ * @package library\Star\Model\Mysqli
+ * @author zhangqy
+ *
+ */
 class Star_Model_Mysqli_Abstract implements Star_Model_Interface
 {
 	protected $db;
@@ -15,11 +28,19 @@ class Star_Model_Mysqli_Abstract implements Star_Model_Interface
 
     protected $statement = null;
 	
+    /**
+     * 构造方法
+     * @param unknown $config
+     */
 	public function __construct($config)
 	{
 		$this->init($config);
 	}
     
+	/**
+	 * 初始化
+	 * @param unknown $config
+	 */
     protected function init($config)
     {
         if (isset($config['slow_query_log']))
@@ -35,6 +56,10 @@ class Star_Model_Mysqli_Abstract implements Star_Model_Interface
         $this->connect($config);
     }
 
+    /**
+     * 连接mysql数据库
+     * @see Star_Model_Interface::connect()
+     */
     public function connect($db)
 	{
         if (!extension_loaded('mysqli'))
@@ -54,6 +79,9 @@ class Star_Model_Mysqli_Abstract implements Star_Model_Interface
         $this->db->set_charset($this->default_charset);
 	}
 	
+	/**
+	 * 开始事务执行
+	 */
 	public function beginTransaction()
 	{
 		$this->db->autocommit(false);
@@ -130,12 +158,12 @@ class Star_Model_Mysqli_Abstract implements Star_Model_Interface
         
         $select->from($table, $conditions)->where($where);
         
-        if ($order !== null)
+        if ($order != null)
         {
             $select->order($order);
         }
         
-        if ($page !== null && $page_size !== null)
+        if ($page != null && $page_size != null)
         {
             $select->limitPage($page, $page_size);
         }
@@ -256,7 +284,7 @@ class Star_Model_Mysqli_Abstract implements Star_Model_Interface
 	}
 	
 	/**
-	 * sql���
+	 * sql query
 	 * @param $sql
 	 */
 	public function _query($sql)
@@ -352,11 +380,19 @@ class Star_Model_Mysqli_Abstract implements Star_Model_Interface
 		return $data;
 	}
 	
+	/**
+	 * 提交事务
+	 * @return boolean
+	 */
 	public function commit()
 	{
 		return $this->db->commit();
 	}
 	
+	/**
+	 * mysql操作回滚
+	 * @return boolean
+	 */
 	public function rollback()
 	{
 		return $this->db->rollback();

@@ -1,7 +1,12 @@
 <?php
 /**
+ * @package library\Star
+ */
+
+/**
  * star layout
  * 
+ * @package library\Star
  * @author zhangqinyang
  *
  */

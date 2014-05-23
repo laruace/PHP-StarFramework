@@ -1,12 +1,15 @@
 <?php
 /**
- *
+ * @package library\Star
+ */
+
+/**
  * 缓存类
- *
+ * 
+ * @package library\Star
  * @author zhangqy
  *
  */
-
 class Star_Cache {
 	
 	protected static $instance = null;
@@ -51,7 +54,7 @@ class Star_Cache {
 	}
         
     /**
-     *
+     * 获取一个缓存实例
      * @return type 
      */
     public function getCache()
@@ -64,6 +67,11 @@ class Star_Cache {
         return self::$instance->cache;
     }
 	
+    /**
+     * 单例模式
+     * @param array $config
+     * @return Star_Cache
+     */
 	public static function initInstance(array $config)
 	{
 		if (self::$instance == null)

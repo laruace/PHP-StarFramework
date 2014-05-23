@@ -16,13 +16,13 @@ set_include_path(implode(PATH_SEPARATOR, array(
 )));
 
 require 'Star/Application.php';
-require 'Page.php'; 
+//require 'Page.php'; 
 
 // Create application, bootstrap, and run
 $application = new Star_Application(
     APPLICATION_ENV,
     APPLICATION_PATH,
-    APPLICATION_PATH . '/configs/application.php',
+    APPLICATION_PATH . '/configs/application.ini',
     realpath(APPLICATION_PATH . '/../library')
 );
 $application->bootstrap()->run();

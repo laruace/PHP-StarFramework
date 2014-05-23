@@ -1,11 +1,13 @@
 <?php
+/**
+ * @package library\Star\Model
+ */
 
 /**
  *
- * @author qinyang.zhang
- * @create date 2010/05/27
+ * @package library\Star\Model
+ * @author qinyang.zhang 2010/05/27
  */
-
 abstract class Star_Model_Abstract
 {
 	
@@ -44,17 +46,15 @@ abstract class Star_Model_Abstract
 	
 	private function _setup()
 	{
-		if (self::$_default_db != null)
-		{
-			return ;
-		}
-		
-		$config = self::$_config;
-		$this->setDefaultAdapter($config[self::ADAPTER]);
 		$this->setAdapter($this->getSlaveDbOption());
 
 		if (self::$_db === null)
 		{
+            if (self::$_default_db == null)
+            {
+                $config = self::$_config;
+                $this->setDefaultAdapter($config[self::ADAPTER]);
+            }
 			self::$_db = & self::$_default_db;
 		}
 	}
@@ -84,38 +84,51 @@ abstract class Star_Model_Abstract
 	}
 	
 	/**
-	 * 插入数据
-	 *
-	 * @param array $data
-	 */
-	public function insert(array $data)
+     * 插入数据
+     * 
+     * @param array $data
+     * @param type $table
+     * @return type 
+     */
+	public function insert(array $data, $table = null)
 	{
+        empty($table) && $table = $this->getTableName();
+        
 		return $this->getDefaultAdapter()->insert($this->getTableName(), $data);
 	}
 
 	/**
-	 * 更新数据
-	 *
-	 * @param $where
-	 * @param array $data
-	 */
-	public function update($where, Array $data, $quote_indentifier = true)
+     * 更新数据
+     * 
+     * @param type $where
+     * @param array $data
+     * @param type $table
+     * @param type $quote_indentifier
+     * @return type 
+     */
+	public function update($where, Array $data, $table = null, $quote_indentifier = true)
 	{
+        empty($table) && $table = $this->getTableName();
+        
 		$where = $this->setWhere($where);
 		
-		return $this->getDefaultAdapter()->update($this->getTableName(), $where, $data, $quote_indentifier);
+		return $this->getDefaultAdapter()->update($table, $where, $data, $quote_indentifier);
 	}
 	
 	/**
-	 * 删除数据
-	 *
-	 * @param $where
-	 */
-	public function delete($where)
+     * 删除数据
+     * 
+     * @param type $where
+     * @param type $table
+     * @return type 
+     */
+	public function delete($where, $table = null)
 	{
+        empty($table) && $table = $this->getTableName();
+        
 		$where = $this->setWhere($where);
 		
-		return $this->getDefaultAdapter()->delete($this->getTableName(), $where);
+		return $this->getDefaultAdapter()->delete($table, $where);
 	}
 	
 	public function query($sql)
@@ -127,38 +140,68 @@ abstract class Star_Model_Abstract
      * 返回相对应主键信息
      * 
      * @param type $pk_id
+     * @param type $table
      * @return type 
      */
-    public function getPk($pk_id)
+    public function getPk($pk_id, $table = null)
     {
+        empty($table) && $table = $this->getTableName();
+        
         $where = $this->setWhere($pk_id);
         
-        return $this->getAdapter()->fetchRow($where, '*', $this->getTableName());
+        return $this->getAdapter()->fetchRow($where, '*', $table);
     }
 	
     /**
      *
      * @param type $where
+     * @param null $conditions
+     * @param null $table
+     * @param null $order
      * @return type 
      */
-	public function fetchOne($where)
+	public function fetchOne($where, $conditions = '*', $table = null, $order = null)
 	{
-		return $this->getAdapter()->fetchOne($where);
+		return $this->getAdapter()->fetchOne($where, $conditions, $table, $order);
 	}
 	
-	public function fetchAll($where)
+    /**
+     *
+     * @param type $where
+     * @param null $conditions
+     * @param null $table
+     * @param null $order
+     * @param null $page
+     * @param null $page_size
+     * @return type 
+     */
+	public function fetchAll($where, $conditions = '*', $table = null, $order = null, $page = null, $page_size = null)
 	{
-		return $this->getAdapter()->fetchAll($where);
+		return $this->getAdapter()->fetchAll($where, $conditions, $table, $order, $page, $page_size);
 	}
 	
-	public function fetchRow($where)
+    /**
+     *
+     * @param type $where
+     * @param null $conditions
+     * @param null $table
+     * @return type 
+     */
+	public function fetchRow($where, $conditions = '*' , $table = null)
 	{
-		return $this->getAdapter()->fetchRow($where);
+		return $this->getAdapter()->fetchRow($where, $conditions , $table);
 	}
 	
-	public function fetchCol($where)
+    /**
+     *
+     * @param type $where
+     * @param null $conditions
+     * @param null $table
+     * @return type 
+     */
+	public function fetchCol($where, $conditions = '*' , $table = null)
 	{
-		$rs = $this->getAdapter()->fetchAll($where);
+		$rs = $this->getAdapter()->fetchAll($where, $conditions , $table);
 		
 		$data = array();
 
@@ -267,11 +310,12 @@ abstract class Star_Model_Abstract
 		self::$_config = $db;
 	}
 	
-	public function getDefaultAdapter($config = null)
+	public function getDefaultAdapter()
 	{
         if (self::$_default_db == null)
         {
-            $this->_setup();
+            $config = self::$_config;
+            $this->setDefaultAdapter($config[self::ADAPTER]);
         }
         
 		return self::$_default_db; 
@@ -284,7 +328,11 @@ abstract class Star_Model_Abstract
 	 */
 	public function setDefaultAdapter($db)
 	{
-		return self::$_default_db = self::setupAdapter($db);
+        if (self::$_default_db == null)
+        {
+            self::$_default_db = self::setupAdapter($db);
+        }
+		return self::$_default_db;
 	}
 	
 	/**
@@ -333,6 +381,25 @@ abstract class Star_Model_Abstract
     	}
     	
     	return $where;
+    }
+    
+    /**
+     * 返回分表表名
+     * 
+     * @param type $hash
+     * @return string 
+     */
+    public function getHashTableName($hash = null)
+    {
+        $table = $this->getTableName();
+        
+        if (empty($hash))
+        {
+            $hash = date('Ym', $_SERVER['REQUEST_TIME']);
+        }
+        
+        $hash_table = $table . '_' . $hash;
+        return $hash_table;
     }
 }
 

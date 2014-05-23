@@ -1,12 +1,16 @@
 <?php
 /**
+ * @package library\Star
+ */
+
+/**
  *
  * Date类
- *
+ * 
+ * @package library\Star
  * @author zhangqy
  *
  */
-
 class Star_Date {
 	
     /**
@@ -28,9 +32,9 @@ class Star_Date {
      * @param type $time
      * @return type 
      */
-    public static function timeToDate($time)
+    public static function timeToDate($time='')
     {
-        return date('Y-m-d H:i:s', $time);
+        return date('Y-m-d H:i:s', $time | time());
     }
     
     /**
@@ -39,9 +43,9 @@ class Star_Date {
      * @param type $time
      * @return type 
      */
-    public static function getWeek($time)
+    public static function getWeek($time='')
     {
-        return date('W', $time); 
+        return date('W', $time | time()); 
     }
     
     /**
@@ -50,9 +54,9 @@ class Star_Date {
      * @param type $time
      * @return type 
      */
-    public static function getYearWeek($time)
+    public static function getYearWeek($time='')
     {
-        return date('YW', $time);
+        return date('YW', $time | time());
     }
     
     /**
@@ -61,9 +65,9 @@ class Star_Date {
      * @param type $time
      * @return type 
      */
-    public static function getYearMonth($time)
+    public static function getYearMonth($time= '')
     {
-        return date('Ym', $time);
+        return date('Ym', $time | time());
     }
     
     /**
@@ -72,9 +76,9 @@ class Star_Date {
      * @param type $time
      * @return type 
      */
-    public static function getDate($time)
+    public static function getDate($time='')
     {
-        return date('Ymd', $time);
+        return date('Ymd', $time | time());
     }
     
     /**

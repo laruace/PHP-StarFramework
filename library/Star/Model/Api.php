@@ -1,11 +1,15 @@
 <?php
 /**
- * API MODEL
- * 
- * @author qinyang.zhang
- * @date 2013/08/26
+ * @package library\Star\Model
  */
 
+/**
+ * API MODEL
+ * 
+ * @package library\Star\Model
+ * @author qinyang.zhang  2013/08/26
+ * 
+ */
 Class Star_Model_Api
 {    
     protected $server_name = '';

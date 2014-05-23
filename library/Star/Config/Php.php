@@ -1,19 +1,30 @@
 <?php
 /**
+ * @package library\Star\Application\Config
+ */
+
+/**
+ * 导入文件
+ */
+require 'Star/Config/Abstract.php';
+
+/**
  *
  * 配置文件类
  * 
  * 处理PHP配置文件
  *
+ * @package library\Star\Application\Config
  * @author zhangqy
  *
  */
-
-require 'Star/Config/Abstract.php';
-
 class Star_Config_Php extends Star_Config_Abstract{
 
-	
+	/**
+	 * 构造方法
+	 * @param unknown $file_name
+	 * @param string $environment
+	 */
 	public function __construct($file_name, $environment = '')
 	{
 		parent::__construct($file_name, $environment);

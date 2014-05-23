@@ -1,11 +1,15 @@
 <?php
 /**
+ * @package library\Star\View
+ */
+
+/**
  * Start_view
- *
+ * 
+ * @package library\Star\View
  * @author zhangqy
  *
  */
-
 abstract class Star_View_Abstract {
 	
 	protected $_script_name = '';
@@ -49,6 +53,11 @@ abstract class Star_View_Abstract {
 
     protected $data = array();
 
+    /**
+     * 构造方法
+     * @param string $application_path
+     * @param unknown $options
+     */
     public function __construct($application_path = '', $options = array())
 	{
 		$this->application_path = $application_path;
@@ -65,6 +74,12 @@ abstract class Star_View_Abstract {
 
 	}
 	
+	/**
+	 * 设置控制器名
+	 * @param unknown $script_name
+	 * @param string $is_controller
+	 * @return Star_View_Abstract
+	 */
 	public function setScriptName($script_name, $is_controller = true)
 	{
 		$this->_is_controller = $is_controller;
@@ -74,6 +89,10 @@ abstract class Star_View_Abstract {
 		return $this;
 	}
 	
+	/**
+	 * 是否显示底层
+	 * @param unknown $is_display
+	 */
     protected function setDisplay($is_display)
     {
         if ($is_display == true)
@@ -85,6 +104,10 @@ abstract class Star_View_Abstract {
         }
     }
     
+    /**
+     * 设置不显示底层
+     * @return Star_View_Abstract
+     */
 	public function setNoRender()
 	{
 		$this->_is_display = false;
@@ -92,6 +115,10 @@ abstract class Star_View_Abstract {
 		return $this;
 	}
     
+	/**
+	 * 设置显示底层
+	 * @return Star_View_Abstract
+	 */
     public function setRender()
     {
         $this->_is_display = true;
@@ -99,6 +126,11 @@ abstract class Star_View_Abstract {
         return $this;
     }
 	
+    /**
+     * 设置基础路径
+     * @param unknown $base_path
+     * @return Star_View_Abstract
+     */
 	public function setBasePath($base_path)
 	{
 		$this->_base_name = $base_path;
@@ -106,16 +138,29 @@ abstract class Star_View_Abstract {
 		return $this;
 	}
 	
+	/**
+	 * 获取基础路径
+	 * @return string
+	 */
 	public function getBasePath()
 	{
 		return $this->_base_name;
 	}
 	
+	/**
+	 * 获取控制器文件名
+	 * @return string
+	 */
 	public function getScriptName()
 	{
 		return $this->_base_name;
 	}
 	
+	/**
+	 * 设置控制器
+	 * @param unknown $controller
+	 * @return Star_View_Abstract
+	 */
 	public function setController($controller)
 	{
 		$this->_controller = $controller;
@@ -123,6 +168,11 @@ abstract class Star_View_Abstract {
 		return $this;
 	}
     
+	/**
+	 * 设置控制器中具体某方法
+	 * @param unknown $action
+	 * @return Star_View_Abstract
+	 */
     public function setAction($action)
     {
         $this->_action = $action;
@@ -130,6 +180,10 @@ abstract class Star_View_Abstract {
         return $this;
     }
 	
+    /**
+     * 获取视图路径
+     * @return Ambigous <type, string>
+     */
 	private function getViewPath()
 	{
         $view_segments = array($this->_base_name, $this->_theme_name);
@@ -169,6 +223,10 @@ abstract class Star_View_Abstract {
 		return $this->encoding;
 	}
 	
+	/**
+	 * 加载视图
+	 * @throws Star_Exception
+	 */
 	public function loadView()
 	{
 		if ($this->_is_display == false)
@@ -190,6 +248,11 @@ abstract class Star_View_Abstract {
 		include $view_path;
 	}
 	
+	/**
+	 * 设置视图模板
+	 * @param unknown $theme
+	 * @return Star_View_Abstract
+	 */
 	public function setTheme($theme)
 	{
 		$this->_theme_name = $theme;
@@ -197,16 +260,29 @@ abstract class Star_View_Abstract {
 		return $this;
 	}
 	
+	/**
+	 * 获取视图模板
+	 * @return string
+	 */
 	public function getTheme()
 	{
 		return $this->_theme_name;
 	}
 	
+	/**
+	 * 获取样式
+	 * @return string
+	 */
 	public function layout()
 	{
 		return $this->layout;
 	}
 	
+	/**
+	 * 设置样式
+	 * @param Star_Layout $star_layout
+	 * @return Star_View_Abstract
+	 */
 	public function setLayout(Star_Layout $star_layout)
 	{
 		$this->layout = $star_layout;
@@ -214,6 +290,12 @@ abstract class Star_View_Abstract {
 		return $this;
 	}
 	
+	/**
+	 * 保存变量至视图变量
+	 * @param unknown $key
+	 * @param string $value
+	 * @return Star_View_Abstract
+	 */
 	public function assign($key, $value = null)
 	{
 		if (is_array($key))
@@ -409,6 +491,10 @@ abstract class Star_View_Abstract {
         return $js_html;
     }
     
+    /**
+     * 读取页面CSS HTML体
+     * @return string
+     */
     public function loadCss()
     {
         $css_html = '';
@@ -437,12 +523,20 @@ abstract class Star_View_Abstract {
         return $this->js_options['base_path'];
     }
     
+    /**
+     * 返回CSS基础路径
+     * @return multitype:
+     */
     public function getCssBasePath()
     {
         return $this->css_options['base_path'];
     }
     
-    //设置缓存超时时间
+    /**
+     * 设置缓存超时时间
+     * @param unknown $timeout
+     * @return Star_View_Abstract
+     */
     public function setCacheTimeout($timeout)
     {
         $this->timeout = (int) $timeout;
@@ -472,7 +566,10 @@ abstract class Star_View_Abstract {
         return $this->is_cache;
     }
     
-    //缓存是否过期
+    /**
+     * 判断缓存是否过期
+     * @return boolean
+     */
     public function cacheIsExpire()
     {
         $cache_path = $this->getCacheFileName();
@@ -518,13 +615,21 @@ abstract class Star_View_Abstract {
         include $cache_path; //载入缓存文件
     }
     
+    /**
+     * 清空缓存
+     * @return boolean
+     */
     public function flushCache()
     {
         return $this->is_flush = true;
     }
 
 
-    //保存缓存内容
+    /**
+     * 保存缓存内容
+     * @param unknown $body
+     * @throws Star_Exception
+     */
     public function saveCache($body)
     {
         $file_name = $this->getCacheFileName();
@@ -543,7 +648,12 @@ abstract class Star_View_Abstract {
         fclose($handle);
     }
 
-    //开启页面缓存
+    /**
+     * 开启页面缓存
+     * @param string $cache_name
+     * @param number $timeout
+     * @param string $is_flush
+     */
     public function openCache($cache_name = 'index', $timeout = 0, $is_flush = false)
     {
         if ($timeout > 0)
@@ -564,12 +674,19 @@ abstract class Star_View_Abstract {
         $this->is_cache = true;
     }
     
+    /**
+     * 设置缓存名称
+     * @param unknown $cache_name
+     */
     public function setCacheName($cache_name)
     {
         $this->cache_name = $cache_name;
     }
     
-    //返回文件路径
+    /**
+     * 返回文件路径
+     * @return Ambigous <type, string>
+     */
     public function getCacheFileName()
     {
         $segments = array(

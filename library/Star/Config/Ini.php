@@ -1,16 +1,23 @@
 <?php
 /**
+ * @package library\Star\Application\Config
+ */
+
+/**
+ * 导入文件
+ */
+require 'Star/Config/Abstract.php';
+
+/**
  *
  * 配置文件类
  * 
  * 处理.Ini配置文件
  *
+ * @package library\Star\Application\Config
  * @author zhangqy
  *
  */
-
-require 'Star/Config/Abstract.php';
-
 class Star_Config_Ini extends Star_Config_Abstract{
 	
     public function __construct($file_name, $environment = '')

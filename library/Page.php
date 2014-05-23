@@ -1,7 +1,12 @@
 <?php
 /**
+ * @package library
+ */
+
+/**
  * 分页类
  * 
+ * @package library
  * @author zqy
  * @version 1.0
  */
@@ -78,6 +83,13 @@ class Page
 		unset(self::$instance->english, self::$instance->chinese, self::$instance->support);
 	}
 
+	/**
+	 * 设置分页参数
+	 * @param unknown $page
+	 * @param unknown $page_size
+	 * @param unknown $total
+	 * @return Ambigous <unknown, number>
+	 */
 	public static function setPage($page, $page_size, $total)
 	{
 		$last_page = ceil($total/$page_size);
@@ -86,6 +98,11 @@ class Page
 		return $page;
 	}
 	
+	/**
+	 * 显示分页
+	 * @param array $page_info
+	 * @return void|Ambigous <string, mixed>
+	 */
 	public static function show(array $page_info)
 	{
 		if (self::$instance == null)

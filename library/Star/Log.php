@@ -1,12 +1,16 @@
 <?php
 /**
+ * @package library\Star
+ */
+
+/**
  *
  * Log操作类
  *
+ * @package library\Star
  * @author zhangqy
  *
  */
-
 class Star_Log {
 	
     protected static $directory_name = 'logs';
@@ -66,6 +70,10 @@ class Star_Log {
         self::$log_directory = $directory_name;
     }
     
+    /**
+     * 设置log文件路径
+     * @param type $file_path 
+     */
     public static function setLogFilePath($file_path)
     {
         self::$file_path = $file_path;

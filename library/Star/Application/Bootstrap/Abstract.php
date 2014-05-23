@@ -1,26 +1,47 @@
 <?php
+/**
+ * @package library\Star\Application\Bootstrap
+ */
 
+/**
+ * @package library\Star\Application\Bootstrap
+ * @author zhangqinyang
+ */
 abstract class Star_Application_Bootstrap_Abstract
 {
 	protected $class_resources = null;
 	
 	protected $container = null;
 	
+	/**
+	 * 构造方法
+	 */
 	public function __construct()
 	{
 		$this->init();
 	}
 	
+	/**
+	 * 初始化方法
+	 */
 	public function init()
 	{
 		
 	}
 	
+	/**
+	 * 设置配置项
+	 *
+	 * @param array $options
+	 */
 	public function setOption($option = null)
 	{
 		
 	}
 	
+	/**
+	 * 
+	 */
 	public function getClassResources()
 	{
 		if ($this->class_resources === null)
@@ -57,6 +78,10 @@ abstract class Star_Application_Bootstrap_Abstract
 		return $this->class_resources;
 	}
 	
+	/**
+	 * 
+	 * @return multitype:
+	 */
 	public function getClassResourcesName()
 	{
 		$resources = $this->getClassResources();
@@ -64,6 +89,11 @@ abstract class Star_Application_Bootstrap_Abstract
 		return array_keys($resources);
 	}
 	
+	/**
+	 * 
+	 * @param string $resource
+	 * @return NULL
+	 */
 	protected function excuteResource($resource = null)
 	{
   		$resource_name = strtolower($resource);
@@ -79,6 +109,11 @@ abstract class Star_Application_Bootstrap_Abstract
         return $return;
 	}
 	
+	/**
+	 * 
+	 * @param string $resource
+	 * @return Star_Application_Bootstrap_Abstract
+	 */
 	final public function bootstrap($resource = null)
 	{
 		$this->_bootstrap($resource);
@@ -86,6 +121,10 @@ abstract class Star_Application_Bootstrap_Abstract
 		return $this;
 	}
 	
+	/**
+	 * 
+	 * @param string $resource
+	 */
 	protected function _bootstrap($resource = null)
 	{
 		if ($resource === null)
@@ -99,6 +138,9 @@ abstract class Star_Application_Bootstrap_Abstract
 		}
 	}
 	
+	/**
+	 * 
+	 */
 	public function getContainer()
 	{
 		if ($this->container === null)
@@ -107,6 +149,12 @@ abstract class Star_Application_Bootstrap_Abstract
 		}
 	}
 	
+	/**
+	 * 
+	 * @param unknown $container
+	 * @throws Star_Exception
+	 * @return Star_Application_Bootstrap_Abstract
+	 */
 	public function setContainer($container)
 	{
 		if (!is_object($container))

@@ -1,10 +1,23 @@
 <?php
+/**
+ * @package library\Star
+ */
 
+/**
+ * 导入文件
+ */
 require 'Star/Loader.php';
 require 'Star/Layout.php';
 require 'Star/Config.php';
 require 'Star/Model/Abstract.php';
 
+/**
+ * 应用基类
+ * 
+ * @package library\Star
+ * @author zqy
+ *
+ */
 class Star_Application {
 
     protected $display_exceptions = false; //是否显示异常 开发测试环境打开方便调试
@@ -194,7 +207,7 @@ class Star_Application {
             throw new Star_Exception('bootstrap object ' . $class . ' not found in:' . $bootstrap_path);
         }
 		
-		$this->bootstrap = new $class($this);
+		$this->bootstrap = new $class($this, $this->request);
 	}
 	
 	/**

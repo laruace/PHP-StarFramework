@@ -1,5 +1,15 @@
 <?php
+/**
+ * @package library\Star\Model\Select
+ */
 
+/**
+ * 数据库检索 接口
+ * 
+ * @package library\Star\Model\Select
+ * @author zhangqy
+ *
+ */
 interface Star_Model_Select_Interface {
 	
 	public function where($conditions, $value = null);

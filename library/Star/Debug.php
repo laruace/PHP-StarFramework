@@ -1,15 +1,22 @@
 <?php
 /**
+ * @package library\Star
+ */
+
+/**
  *
  * debug操作类
  *
+ * @package library\Star
  * @author zhangqy
  *
  */
-
 class Star_Debug {
 	
-
+    /**
+     * 输出并中断程序
+     * @param unknown $data
+     */
     public static function dump($data)
     {
         var_dump($data);

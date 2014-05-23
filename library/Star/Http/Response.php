@@ -1,12 +1,14 @@
 <?php
-
+/**
+ * @package library\Star\Http
+ */
 /**
  * Response 类
  *
+ * @package library\Star\Http
  * @author zhangqy
  *
  */
-
 class Star_Http_Response
 {
     protected static $messages = array(
@@ -67,12 +69,21 @@ class Star_Http_Response
         
     }
 
+    /**
+     * 设置头信息的状态
+     * @param unknown $code
+     * @return string
+     */
     public static function getCodeMessage($code)
     {
         $message = self::$messages[$code];
         return 'HTTP/1.1 ' . $code . ' ' . $message;
     }
     
+    /**
+     * 设置流浪器缓存
+     * @param unknown $timeout
+     */
     public static function setBrownerCache($timeout)
     {
         header('Cache-Control:max-age=' . $timeout);
@@ -80,6 +91,10 @@ class Star_Http_Response
         header("Last-Modified:".gmdate("D, d M Y H:i:s",(time()+$timeout)) . ' GMT'); 
     }
 
+    /**
+     * 判断是否是缓存数据
+     * @return boolean
+     */
     public function isCache()
     {
         if (isset($_SERVER['HTTP_IF_MODIFIED_SINCE']) && time() < strtotime($_SERVER['HTTP_IF_MODIFIED_SINCE']))

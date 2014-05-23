@@ -1,17 +1,33 @@
 <?php
 /**
+ * @package library\Star\Application\Cache
+ */
+
+/**
+ * 导入文件
+ */
+require 'Star/Cache/Interface.php';
+
+
+/**
  * Memcached 缓存类
- * 
+ *
+ * @package library\Star\Application\Cache
  * @author zhangqinyang
  * 
  */
-
-require 'Star/Cache/Interface.php';
-
 class Star_Cache_Memcached implements Star_Cache_Interface {
 
+	/**
+	 * memcached实例
+	 * @var unknown
+	 */
 	public $memcached = null;
 	
+	/**
+	 * 构造方法   实例化$memcached变量
+	 * @param array $config
+	 */
 	public function __construct(array $config)
 	{
 		$this->memcached = new Memcached();
@@ -29,11 +45,19 @@ class Star_Cache_Memcached implements Star_Cache_Interface {
 		}
 	}
 	
+	/**
+	 * 根据key所在服务器映射出该服务器信息
+	 * @param unknown $key
+	 */
 	protected function getServerByKey($key)
 	{
 		return $this->memcached->getServerBykey($key);
 	}
 	
+	/**
+	 * 添加memcached缓存项
+	 * @see Star_Cache_Interface::add()
+	 */
 	public function add($key, $value, $lefttime = 0)
 	{
 		if ($lefttime == 0)
@@ -45,11 +69,19 @@ class Star_Cache_Memcached implements Star_Cache_Interface {
 		}
 	}
 	
+	/**
+	 * 获取memcached缓存项
+	 * @see Star_Cache_Interface::get()
+	 */
 	public function get($key)
 	{
 		return $this->memcached->get($key);
 	}
 	
+	/**
+	 * 添加memcached缓存项
+	 * @see Star_Cache_Interface::set()
+	 */
 	public function set($key, $value, $lefttime = 0)
 	{
 		if ($lefttime == 0)
@@ -61,11 +93,18 @@ class Star_Cache_Memcached implements Star_Cache_Interface {
 		}
 	}
 	
+	/**
+	 * 销毁memcached缓存项
+	 * @see Star_Cache_Interface::delete()
+	 */
 	public function delete($key)
 	{
 		return $this->memcached->delete($key);
 	}
 	
+	/**
+	 * 
+	 */
     public function colse()
     {
       
