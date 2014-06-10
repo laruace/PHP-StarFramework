@@ -48,8 +48,8 @@ class Star_Application {
         
 		$star_config = new Star_Config($config_file, $application_env);
 		$options = $star_config->loadConfig();
-		$this->setOption($options);
         $this->iniRequest();
+		$this->setOption($options);
 	}
 
     /**
@@ -207,7 +207,7 @@ class Star_Application {
             throw new Star_Exception('bootstrap object ' . $class . ' not found in:' . $bootstrap_path);
         }
 		
-		$this->bootstrap = new $class($this, $this->request);
+		$this->bootstrap = new $class($this->request);
 	}
 	
 	/**
@@ -250,7 +250,7 @@ class Star_Application {
         //DB配置
 		if (isset($options[Star_Model_Abstract::ADAPTER]) && $options[Star_Model_Abstract::ADAPTER])
 		{
-            call_user_func(array('Star_Model_Abstract', 'setting'), $options);
+            call_user_func(array('Star_Model_Abstract', 'setting'), $options[Star_Model_Abstract::ADAPTER]);
 		}
         
         //初始化缓存
@@ -306,7 +306,7 @@ class Star_Application {
      */
 	private function dispatch()
 	{
-        header('Cache-Control: private');
+        header('Cache-Control: no-cache');
 		header('Content-Type: text/html; charset=' . $this->view->getEncoding());
 		ob_start();
 

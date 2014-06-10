@@ -26,7 +26,7 @@ class Star_Http_Request extends Star_Http_Abstract
      */
     public function __construct()
 	{
-		$this->params = $_REQUEST;
+		$this->params = array_merge($_POST, $_GET);
 		$uri = $this->getUri();
 		$this->parseUrl($uri);
 	}

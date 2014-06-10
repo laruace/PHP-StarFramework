@@ -10,14 +10,13 @@
  */
 abstract class Star_Model_Abstract
 {
-	
 	const ADAPTER = 'db';
 	
 	const SLAVE_ADAPTER = 'slave_db';
 	
 	protected $_primary = null; //主键
 	
-	protected $_prefix = null; //表前缀
+	protected static $_prefix = null; //表前缀
 	
 	protected static $_config = null; //配置
 	
@@ -40,7 +39,7 @@ abstract class Star_Model_Abstract
 		{
 			$this->setOptions($config);
 		}
-		
+
 		//$this->_setup();
 	}
 	
@@ -58,21 +57,46 @@ abstract class Star_Model_Abstract
 			self::$_db = & self::$_default_db;
 		}
 	}
-	
-	protected function getSlaveDbOption()
+    
+    /**
+     * 设置表前缀
+     * @param $prefix
+     * @return \Star_Model_Abstract 
+     */
+    protected function setPrefix($prefix)
+    {
+        self::$_prefix = $prefix;
+    }
+
+    /**
+     * 返回表前缀
+     * 
+     * @return type 
+     */
+    public function getPrefix()
+    {
+        return self::$_prefix;
+    }
+
+
+    /**
+     * 返回从库配置
+     * 
+     * @return array 
+     */
+    protected function getSlaveDbOption()
 	{
         $option = array();
 		$config = self::$_config;
-        
+
         if (!isset($config[self::SLAVE_ADAPTER]))
         {
             return $option;
         }
 		
 		$slave_options = $config[self::SLAVE_ADAPTER];
-		
-		
-		if ($config[self::ADAPTER]['multi_slave_db'] == true && !empty($slave_options))
+
+		if ($config['multi_slave_db'] == true && !empty($slave_options))
 		{
 			$option = $slave_options[array_rand($slave_options)];
 		} else
@@ -222,11 +246,15 @@ abstract class Star_Model_Abstract
 	}
 	
 	/**
-	 * 返回表明
-	 */
-	public function getTableName()
+     * 返回表名
+     * 
+     * @param type $name
+     * @return type 
+     */
+	public function getTableName($name='')
 	{
-		return $this->_prefix . $this->_name;
+		$prefix = $this->getPrefix();
+        return empty($name) ? $prefix . $this->_name : $prefix . $name;
 	}
 	
     /**
@@ -307,6 +335,12 @@ abstract class Star_Model_Abstract
 	
 	public static function setting($db)
 	{
+        //表前缀
+        if (isset($db['prefix']))
+        {
+            self::$_prefix = $db['prefix'];
+        }
+        
 		self::$_config = $db;
 	}
 	
@@ -315,7 +349,7 @@ abstract class Star_Model_Abstract
         if (self::$_default_db == null)
         {
             $config = self::$_config;
-            $this->setDefaultAdapter($config[self::ADAPTER]);
+            $this->setDefaultAdapter($config);
         }
         
 		return self::$_default_db; 

@@ -99,7 +99,7 @@ class Star_Model_Mysqli_Select implements Star_Model_Select_Interface
 	protected function setWhere($conditions, $value = null, $where_type = self::SQL_AND)
 	{
 		$conditions = '(' . $conditions . ')';
-		if(!$value == null)
+		if($value !== null)
 		{
 			$value      =  is_array($value) ? implode(',', $value) : $this->disposeQuote($value);
 			$conditions =  str_replace('?', $value, $conditions);
@@ -157,17 +157,21 @@ class Star_Model_Mysqli_Select implements Star_Model_Select_Interface
 	
 	protected function setColumn($table_name, $columns, $alias)
 	{
-		if (is_array($columns))
-		{
-		    $talbe = $this->setAlias($table_name, $alias);
-			foreach ($columns as $key => $value)
-			{
-				$this->_column[] = !is_numeric($key) ? $talbe . '.`' . $value . '` `' . $key . '`': $talbe . '.`' . $value . '`';
-			}
-		} else
-		{
-			$this->_column[] = $columns;
-		}
+        if ($columns)
+        {
+            if (is_array($columns))
+            {
+                $talbe = $this->setAlias($table_name, $alias);
+                foreach ($columns as $key => $value)
+                {
+                    $this->_column[] = !is_numeric($key) ? $talbe . '.`' . $value . '` `' . $key . '`': $talbe . '.`' . $value . '`';
+                }
+            } else
+            {
+                $talbe = $this->setAlias($table_name, $alias);
+                $this->_column[] = $columns == '*' ? $talbe . '.' . $columns : $columns;
+            }
+        }
 	}
 	
 	protected function setAlias($table_name, $alias)
@@ -181,7 +185,7 @@ class Star_Model_Mysqli_Select implements Star_Model_Select_Interface
 	 * @param $conditions 查询条件
 	 * @param $columns 查询字段
 	 */
-	public function joinLeft($table, $conditions, $columns)
+	public function joinLeft($table, $conditions, $columns = '')
 	{
 		$this->setJoin(self::SQL_LEFT_JOIN, $table, $conditions, $columns);
 		return $this;
@@ -193,7 +197,7 @@ class Star_Model_Mysqli_Select implements Star_Model_Select_Interface
 	 * @param $conditions 查询条件
 	 * @param $columns 查询字段
 	 */
-	public function joinRight($table, $conditions, $columns)
+	public function joinRight($table, $conditions, $columns = '')
 	{
 		$this->setJoin(self::SQL_RIGHT_JOIN, $table, $conditions, $columns);
 		return $this;
@@ -205,7 +209,7 @@ class Star_Model_Mysqli_Select implements Star_Model_Select_Interface
 	 * @param $conditions 查询条件
 	 * @param $columns 查询字段
 	 */
-	public function joinInner($table, $conditions, $columns)
+	public function joinInner($table, $conditions, $columns = '')
 	{
 		$this->setJoin(self::SQL_INNER_JOIN, $table, $conditions, $columns);
 		return $this;

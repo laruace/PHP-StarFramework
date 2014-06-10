@@ -18,11 +18,14 @@ require 'Star/Application/Bootstrap/Abstract.php';
  */
 class Star_Application_Bootstrap_Bootstrap extends Star_Application_Bootstrap_Abstract
 {
-	/**
+    protected $request = null;
+
+    /**
 	 * 构造方法
 	 */
-	public function __construct()
+	public function __construct($request)
 	{
+        $this->request = $request;
 		parent::__construct();
 	}
 	

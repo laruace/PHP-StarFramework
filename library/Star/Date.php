@@ -34,7 +34,7 @@ class Star_Date {
      */
     public static function timeToDate($time='')
     {
-        return date('Y-m-d H:i:s', $time | time());
+        return date('Y-m-d H:i:s', $time ? $time : time());
     }
     
     /**
@@ -45,7 +45,7 @@ class Star_Date {
      */
     public static function getWeek($time='')
     {
-        return date('W', $time | time()); 
+        return date('W', $time ? $time : time()); 
     }
     
     /**
@@ -56,7 +56,7 @@ class Star_Date {
      */
     public static function getYearWeek($time='')
     {
-        return date('YW', $time | time());
+        return date('YW', $time ? $time : time());
     }
     
     /**
@@ -67,7 +67,7 @@ class Star_Date {
      */
     public static function getYearMonth($time= '')
     {
-        return date('Ym', $time | time());
+        return date('Ym', $time ? $time : time());
     }
     
     /**
@@ -78,7 +78,7 @@ class Star_Date {
      */
     public static function getDate($time='')
     {
-        return date('Ymd', $time | time());
+        return date('Ymd', $time ? $time : time());
     }
     
     /**
@@ -191,6 +191,21 @@ class Star_Date {
             $ago_time = intval($time/86400) . '天' . intval(($time%86400)/3600) . '小时' . intval(($time%3600)/60) . '分钟';
         }
         return $ago_time;
+    }
+    
+    /**
+     * 判断是否时间格式
+     * 
+     * @param type $date
+     * @return boolean 
+     */
+    public function isDate($date)
+    {
+        if (empty($date))
+        {
+            return false;
+        }
+        return preg_match('/^[0-9]{4}(\-|\/)[0-9]{1,2}(\\1)[0-9]{1,2}(|\s+[0-9]{1,2}(:[0-9]{1,2}){0,2})$/', $date);
     }
 }
 

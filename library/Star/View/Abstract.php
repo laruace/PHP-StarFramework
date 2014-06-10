@@ -36,9 +36,11 @@ abstract class Star_View_Abstract {
 	
 	protected $encoding = 'UTF-8'; //默认编码
     
-    protected $js_options = array();
+    protected $static_options = array(); //静态资源配置
+
+    protected $js_options = array(); //js配置
     
-    protected $css_options = array();
+    protected $css_options = array(); //css配置
 
     protected $is_cache = false; //页面是否缓存
     
@@ -51,7 +53,7 @@ abstract class Star_View_Abstract {
     protected $is_flush = false; //是否强制刷新缓存
 
 
-    protected $data = array();
+    protected $assign = array();
 
     /**
      * 构造方法
@@ -302,15 +304,27 @@ abstract class Star_View_Abstract {
         {
             foreach ($key as $k => $val)
             {
-                $this->data[$k] = $val;
+                $this->assign[$k] = $val;
             }
         } else
         {
-            $this->data[$key] = $value;
+            $this->assign[$key] = $value;
         }
         
         return $this;
 	}
+    
+    /**
+     * 设置静态资源基础路径
+     * 
+     * @param type $path
+     * @return \Star_View_Abstract 
+     */
+    public function setStaticBasePath($path)
+    {
+        $this->static_options['base_path'] = $path;
+        return $this;
+    }
     
     /**
      * 设置JS基础路径
@@ -338,6 +352,18 @@ abstract class Star_View_Abstract {
         return $this;
     }
     
+    /**
+     * 设置静态资源版本号
+     * 
+     * @param type $version
+     * @return \Star_View_Abstract 
+     */
+    public function setStaticVersion($version)
+    {
+        $this->static_options['version'] = $version;
+        return $this;
+    }
+
     /**
      * 设置js版本号
      * 
@@ -388,6 +414,27 @@ abstract class Star_View_Abstract {
     }
     
     /**
+     * 返回静态资源基础路径
+     * 
+     * @return type 
+     */
+    public function getStaticBasePath()
+    {
+        return $this->static_options['base_path'];
+    }
+    
+    /**
+     * 返回静态资源版本号
+     * 
+     * @return type 
+     */
+    public function getStaticVersion()
+    {
+        return $this->static_options['version'];
+    }
+
+
+    /**
      * 返回JS版本号
      * 
      * @return type 
@@ -435,7 +482,21 @@ abstract class Star_View_Abstract {
         
         return $this;
     }
-
+    
+    public function setStaticConfig($options)
+    {
+        //设置静态资源基础路径
+        if (isset($options['base_path']) && !empty($options['base_path']))
+        {
+            $this->setStaticBasePath($options['base_path']);
+        }
+        
+        //设置静态资源版本号
+        if (isset($options['version']) && !empty($options['version']))
+        {
+            $this->setStaticVersion($options['version']);
+        }
+    }
 
     /**
      * 添加js加载配置
@@ -716,11 +777,11 @@ abstract class Star_View_Abstract {
     }
     
     public function __set($name, $value) {
-        $this->data[$name] = $value;
+        $this->assign[$name] = $value;
     }
     
     public function __get($name) {
-        return $this->data[$name];
+        return $this->assign[$name];
     }
 }
 

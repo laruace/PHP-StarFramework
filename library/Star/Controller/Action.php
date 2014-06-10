@@ -245,9 +245,9 @@ class Star_Controller_Action implements Star_Controller_Action_Interface{
 	{   
 		$args = func_get_args();
 		$message = array(
-			'err' => (bool) $args[0],
-			'message' => $args[2],
-			'data' => $args[1]
+			'err' => $args[0],
+			'message' => $args[0] > 0 ? $args[1] : $args[2],
+			'data' => $args[0] == 0 ? $args[1] : ''
 		);
 
         $this->disableLayout();
