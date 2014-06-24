@@ -88,10 +88,8 @@ class Star_Controller_Action implements Star_Controller_Action_Interface{
      */
 	public function initView(Star_View $star_view)
 	{
+        
 		$this->view = $star_view;
-		$this->view->setController($this->request->getControllerName())
-                    ->setScriptName($this->request->getActionName())
-                    ->setAction($this->request->getActionName());
 		return $this->view;
 	}
     

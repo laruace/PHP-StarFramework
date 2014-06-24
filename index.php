@@ -22,7 +22,7 @@ require 'Star/Application.php';
 $application = new Star_Application(
     APPLICATION_ENV,
     APPLICATION_PATH,
-    APPLICATION_PATH . '/configs/application.ini',
+    APPLICATION_PATH . '/configs/application.php',
     realpath(APPLICATION_PATH . '/../library')
 );
 $application->bootstrap()->run();

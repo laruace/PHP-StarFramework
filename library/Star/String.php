@@ -195,6 +195,55 @@ class Star_String {
     	
     	return $params;
     }
+    
+    /**
+     * 验证是否是正确邮箱根式
+     * 
+     * @param type $email
+     * @return boolean 
+     */
+    public static function isEmail($email)
+    {
+        if(preg_match("/^([_a-z0-9-]+)(\.[_a-z0-9-]+)*@([a-z0-9-]+)(\.[a-z0-9-]+)*(\.[a-z]{2,4})$/i", $email))
+        {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
+    /**
+     * 验证是否正确手机号码
+     * 
+     * @param type $mobile
+     * @return boolean 
+     */
+    public function isMobile($mobile)
+    {
+        if (preg_match('/^1[0-9]{10}$/', $mobile))
+        {
+            return true;
+        } else{
+            return false;
+        }
+    }
+    
+    /**
+     * 验证是否正确的用户名格式
+     * 
+     * @param type $username
+     * @return boolean 
+     */
+    public function isUsername($username)
+    {
+        //用户名只能以数字或字母开头6-16个字符
+        if (preg_match('/^[a-z0-9][a-z0-9_\.]{5,15}$/i', $username))
+        {
+            return true;
+        } else{
+            return false;
+        }
+    }
 }
 
 ?>

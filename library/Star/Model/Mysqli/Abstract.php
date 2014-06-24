@@ -298,7 +298,7 @@ class Star_Model_Mysqli_Abstract implements Star_Model_Interface
         
         if ($resource === false)
         {
-            throw new Star_Exception("sql err: ". $sql, 500);
+            throw new Star_Exception("SQL: ". $sql . " \nError Message:" . $this->db->error, 500);
         }
 
         if($this->slow_query_log == true)

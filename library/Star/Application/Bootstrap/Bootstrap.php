@@ -18,24 +18,12 @@ require 'Star/Application/Bootstrap/Abstract.php';
  */
 class Star_Application_Bootstrap_Bootstrap extends Star_Application_Bootstrap_Abstract
 {
-    protected $request = null;
-
     /**
 	 * 构造方法
 	 */
-	public function __construct($request)
+	public function __construct($application)
 	{
-        $this->request = $request;
-		parent::__construct();
-	}
-	
-	/**
-	 * 初始化
-	 */
-	public function init()
-	{
-		$this->setOption();
-		
+		parent::__construct($application);
 	}
 	
 	/**
@@ -43,11 +31,36 @@ class Star_Application_Bootstrap_Bootstrap extends Star_Application_Bootstrap_Ab
 	 *
 	 * @param array $options
 	 */
-	public function setOption($option = null)
+	public function setOptions($options = null)
 	{
-		
-	}
+		if (!empty($options))
+        {
+            $options = array_change_key_case($options, CASE_LOWER);
+            foreach ($options as $key => $value)
+            {
+                if ($key == 'resources')
+                {
+                    $methods = get_class_methods($this);
+                    $methods = array_flip($methods);
+                    foreach ($value as $resource => $resource_options)
+                    {
+                        $method = 'set' . ucfirst($resource);
+                        if (array_key_exists($method, $methods))
+                        {
+                            $this->$method($resource_options);
+                        }
+                    }
+                }
+            }
+        }
 
+        $this->initView();
+	}
+    
+    public function run()
+    {
+        $this->dispatch();
+    }
 }
 
 ?>

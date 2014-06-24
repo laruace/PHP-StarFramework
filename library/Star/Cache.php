@@ -39,13 +39,13 @@ class Star_Cache {
      */
 	public function factory(array $config)
 	{
-		$cache_type = ucfirst($config['type']);
+		$cache_adapt = ucfirst($config['adapt']);
 		
-		$cache_class = "Star_Cache_{$cache_type}";
+		$cache_class = "Star_Cache_{$cache_adapt}";
 
-		if (!in_array($cache_type, $this->cache_types))
+		if (!in_array($cache_adapt, $this->cache_types))
 		{
-			throw new Star_Exception( $cache_type . ' cache type isn\'t supported.');
+			throw new Star_Exception( $cache_adapt . ' cache type isn\'t supported.');
 			
 			return ;
 		}

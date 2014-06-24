@@ -9,32 +9,66 @@
  */
 abstract class Star_Application_Bootstrap_Abstract
 {
-	protected $class_resources = null;
+    protected $application = null; //Star_Application
+
+    protected $class_resources = null;
 	
 	protected $container = null;
-	
-	/**
+    
+    protected $view = null; //Star_View
+    
+    protected $request = null; //Star_Http_Request
+    
+    public $front = null; //Star_Controller_Front
+
+    /**
 	 * 构造方法
 	 */
-	public function __construct()
+	public function __construct($application)
 	{
-		$this->init();
+        $this->initRequest();
+        $this->initResponse();
+        $this->initFrontController();
+        $this->setApplication($application);
+        $options = $application->getOptions();
+        $this->setOptions($options);
 	}
-	
-	/**
-	 * 初始化方法
-	 */
-	public function init()
-	{
-		
-	}
-	
-	/**
+
+    /**
+     * 设置Application
+     * 
+     * @param Star_Application $application
+     * @return \Star_Application_Bootstrap_Abstract
+     * @throws Star_Exception 
+     */
+    public function setApplication($application)
+    {
+        if ($application instanceof Star_Application)
+        {
+            $this->application = $application;
+        } else
+        {
+            throw new Star_Exception('Invalid application provided to bootstrap constructor (received "' . get_class($application) . '" instance)');
+        }
+        return $this;
+    }
+    
+    /**
+     * 返回application
+     * @return type 
+     */
+    public function getApplication()
+    {
+        return $this->application;
+    }
+
+
+    /**
 	 * 设置配置项
 	 *
 	 * @param array $options
 	 */
-	public function setOption($option = null)
+	public function setOptions($option = null)
 	{
 		
 	}
@@ -63,7 +97,6 @@ abstract class Star_Application_Bootstrap_Abstract
                 $methods = get_class_methods($this);
             }
             
-			
 			$this->class_resources = array();
 			
 			foreach ($methods as $method)
@@ -166,6 +199,102 @@ abstract class Star_Application_Bootstrap_Abstract
 		
 		return $this;
 	}
+
+    /**
+     * 初始化view 
+     */
+    protected function initView()
+    {
+        if ($this->view == null || ($this->view instanceof Star_View) == false)
+        {
+            $this->view = new Star_View(array());
+        }
+    }
+    
+    /**
+     * 消息派遣 
+     */
+    public function dispatch()
+    {
+        $this->front->dispatch($this->view);
+    }
+    
+    /**
+     * 初始化request 
+     */
+	protected function initRequest()
+	{
+        require 'Star/Http/Request.php';
+		$request = new Star_Http_Request();
+		$this->request = $request;
+	}
+    
+    /**
+     * 初始化Response 
+     */
+    protected function initResponse()
+    {
+        require 'Star/Http/Response.php';
+		$response = new Star_Http_Response();
+		$this->response = $response;
+    }
+    
+    /**
+     * 初始化frontCrontroller 
+     */
+    protected function initFrontController()
+    {
+        $front = new Star_Controller_Front($this->request, $this->response);
+        $this->front = $front;
+    }
+
+    /**
+     * 设置view
+     * 
+     * @param type $application_path
+     * @param type $options
+     * @return \Star_Application 
+     */
+	protected function setView($options)
+	{
+        require 'Star/View.php';
+		$this->view = new Star_View($this->getApplication()->getApplicationPath(), $options);
+		
+		return $this;
+	}
+    
+    /**
+     * 设置缓存
+     * 
+     * @param array $options 
+     */
+	public function setCache(array $options)
+	{
+        require 'Star/Cache.php';
+        Star_Cache::initInstance($options);
+	}
+    
+    /**
+     * 设置DB
+     * 
+     * @param type $options 
+     */
+    public function setDb($options)
+    {
+        call_user_func(array('Star_Model_Abstract', 'setting'), $options);
+        return $this;
+    }
+    
+    /**
+     * 设置FrontController
+     * 
+     * @param type $options 
+     */
+    public function setFrontController($options)
+    {
+        $this->front->setOptions($options);
+        return $this;
+    }
 }
 
 ?>
