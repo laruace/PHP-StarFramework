@@ -9,6 +9,7 @@ class IndexController extends Star_Controller_Action
 	
 	public function indexAction()
 	{
+        return ;
         Star_Http_Response::setBrownerCache(600);
         
         $user_service = new UserService();

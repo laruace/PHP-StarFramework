@@ -187,8 +187,7 @@ Class Star_Model_Api
     {
         if (empty($this->server_name))
         {
-            $resources_config = Star_Config::get('resources');
-            $this->server_name = $resources_config['api']['server_name'];
+            $this->server_name = Star_Config::get('resources.api.server_name');
         }
 
         return $this->server_name;

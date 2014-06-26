@@ -216,7 +216,7 @@ abstract class Star_Application_Bootstrap_Abstract
      */
     public function dispatch()
     {
-        $this->front->dispatch($this->view);
+        $this->front->setView($this->view)->dispatch();
     }
     
     /**

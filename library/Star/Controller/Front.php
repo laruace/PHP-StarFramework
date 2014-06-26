@@ -69,6 +69,18 @@ class Star_Controller_Front{
         }
         return $this;
     }
+    
+    /**
+     * 设置view
+     * 
+     * @param Star_View $view
+     * @return $this 
+     */
+    public function setView(Star_View $view)
+    {
+        $this->view = $view;
+        return $this;
+    }
 
     /**
      * 返回controller name
@@ -220,18 +232,18 @@ class Star_Controller_Front{
      * 
      * @return type 
      */
-	public function dispatch(Star_View $view)
+	public function dispatch()
 	{
         header('Cache-Control: no-cache');
-		header('Content-Type: text/html; charset=' . $view->getEncoding());
+		header('Content-Type: text/html; charset=' . $this->view->getEncoding());
 		ob_start();
         
         try{
             require 'Star/Controller/Action.php';
-            $view->setController($this->getControllerName())
+            $this->view->setController($this->getControllerName())
                  ->setScriptName($this->getActionName())
                  ->setAction($this->getActionName());
-            $controller = $this->loadController($view); //实例化controller
+            $controller = $this->loadController(); //实例化controller
             $action = $this->getAction(); //返回action
             $controller->dispatch($action); //执行action
             call_user_func(array('Star_Model_Abstract', 'Close')); //主动关闭数据库链接
@@ -251,7 +263,7 @@ class Star_Controller_Front{
      * @return type
      * @throws Star_Exception 
      */
-    public function loadController($view)
+    public function loadController()
     {
         $contoller = $this->getController();
         $file_path = Star_Loader::getFilePath(array($this->getControllerDirectory(), $contoller));
@@ -275,7 +287,7 @@ class Star_Controller_Front{
             throw new Star_Exception("Invalid controller class ({$contoller}) from file {$file_path}", 404);
         }
 
-        return new $contoller($this->request, $view);
+        return new $contoller($this->request, $this->response, $this->view);
     }
     
     /**

@@ -52,7 +52,7 @@ abstract class Star_Model_Abstract
             if (self::$_default_db == null)
             {
                 $config = self::$_config;
-                $this->setDefaultAdapter($config[self::ADAPTER]);
+                $this->setDefaultAdapter($config);
             }
 			self::$_db = & self::$_default_db;
 		}
@@ -262,7 +262,7 @@ abstract class Star_Model_Abstract
      */
 	public static function Close()
 	{
-		if (self::$_db !== self::$_default_db)
+		if (self::$_db !== null && self::$_db !== self::$_default_db)
 		{
 			self::$_db->close();
 		}

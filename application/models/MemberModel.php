@@ -6,7 +6,7 @@ class MemberModel extends Star_Model_Api {
 
     public function get()
     {
-        return $this->api('', '');
+        //return $this->api('', '');
     }
     //put your code here
 }

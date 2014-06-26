@@ -51,11 +51,6 @@ class Star_Application {
      */
 	public function run()
 	{
-        if ($this->getBootstrap() == null)
-        {
-            $this->initBootstrap();
-        }
-        
 		$this->bootstrap->run();
 	}
 	
@@ -82,6 +77,8 @@ class Star_Application {
         {
             $this->setIncludePaths($options['includePaths']);
         }
+        
+        $this->initBootstrap();
 	}
     
     /**
@@ -99,7 +96,11 @@ class Star_Application {
      */
     public function initBootstrap()
     {
-        $this->bootstrap = new Star_Application_Bootstrap_Bootstrap($this);
+        if ($this->bootstrap == null)
+        {
+            require 'Star/Application/Bootstrap/Bootstrap.php';
+            $this->bootstrap = new Star_Application_Bootstrap_Bootstrap($this);
+        }
     }
 
 
@@ -159,7 +160,7 @@ class Star_Application {
 	{
         if ($this->bootstrap !=null)
         {
-            $this->getBootstrap()->bootstrap($resource);
+            $this->bootstrap->bootstrap($resource);
         }
 		return $this;
 	}
@@ -226,7 +227,7 @@ class Star_Application {
     }
     
     /**
-     * 设置默认action_name 初始是Action
+     * 设置默认action_name 初始是index
      * 
      * @param type $action_name
      * @return \Star_Application 
@@ -234,30 +235,6 @@ class Star_Application {
     public function setDefaultActionName($action_name)
     {
         $this->bootstrap->front->setDefaultActionName($action_name);
-        return $this;
-    }
-    
-    /**
-     * 设置controllerKey 初始是Controller
-     * 
-     * @param type $controller_key
-     * @return \Star_Application 
-     */
-    public function setControllerKey($controller_key)
-    {
-        $this->bootstrap->front->setControllerKey($controller_key);
-        return $this;
-    }
-    
-    /**
-     * 设置actionKey 初始是Action
-     * 
-     * @param type $action_key
-     * @return \Star_Application 
-     */
-    public function setActionKey($action_key)
-    {
-        $this->bootstrap->front->setActionKey($action_key);
         return $this;
     }
     

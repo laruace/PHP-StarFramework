@@ -78,6 +78,19 @@ class Star_Http_Request extends Star_Http_Abstract
 		
 	}
     
+   /**
+     * 判断是否是缓存数据
+     * @return boolean
+     */
+    public function isCache()
+    {
+        if (isset($_SERVER['HTTP_IF_MODIFIED_SINCE']) && time() < strtotime($_SERVER['HTTP_IF_MODIFIED_SINCE']))
+        {
+            return true;
+        }
+        return false;
+    }
+    
 	/**
      * 是否是GET请求
      * 

@@ -90,19 +90,6 @@ class Star_Http_Response
         header('Expires:' . gmdate ('D, d M Y H:i:s', (time() + $timeout)) . ' GMT' );
         header("Last-Modified:".gmdate("D, d M Y H:i:s",(time()+$timeout)) . ' GMT'); 
     }
-
-    /**
-     * 判断是否是缓存数据
-     * @return boolean
-     */
-    public function isCache()
-    {
-        if (isset($_SERVER['HTTP_IF_MODIFIED_SINCE']) && time() < strtotime($_SERVER['HTTP_IF_MODIFIED_SINCE']))
-        {
-            return true;
-        }
-        return false;
-    }
 }
 
 ?>

@@ -20,7 +20,7 @@ class Bootstrap extends Star_Application_Bootstrap_Bootstrap
 
     protected function _initHttpCache()
     {
-        if (Star_Http_Response::isCache() == true)
+        if (Star_Http_Request::isCache() == true)
         {
             header('Cache-control: private');
             header(Star_Http_Response::getCodeMessage(304));

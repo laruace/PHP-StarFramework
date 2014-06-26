@@ -74,7 +74,26 @@ class Star_Config {
 	 */
     public static function get($key = null)
     {
-        return isset(self::$options[$key]) ? self::$options[$key] : self::$options;
+        $keys = explode('.', $key);
+        if (count($keys) == 1)
+        {
+            return isset(self::$options[$key]) ? self::$options[$key] : self::$options;
+        } else
+        {
+            $value = self::$options;
+            
+            foreach ($keys as $key)
+            {
+                if (!isset($value[$key]) || empty($value[$key]))
+                {
+                    $value = '';
+                    break;
+                } else {
+                    $value = $value[$key];
+                }
+            }
+            return $value;
+        }
     }
 }
 

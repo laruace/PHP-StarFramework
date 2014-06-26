@@ -23,15 +23,18 @@ class Star_Controller_Action implements Star_Controller_Action_Interface{
 	
 	public $layout;
     
+    protected $front_controller;
+
     protected static $_message_script = 'message';
     
     protected static $_warning_script = 'warning';
 
 
-    final public function __construct(Star_Http_Request $request, Star_View $view)
+    final public function __construct(Star_Http_Request $request, Star_Http_Response $response, Star_View $view)
 	{
-		$this->setRequest($request);
-        $this->initView($view);
+		$this->setRequest($request)
+             ->setResponse($response)
+             ->setView($view);
         $star_layout = Star_Layout::getMvcInstance();
 		
         if ($star_layout instanceof Star_Layout)
@@ -59,7 +62,19 @@ class Star_Controller_Action implements Star_Controller_Action_Interface{
 		return $this;
 	}
 	
-	/**
+    /**
+     * 设置RESPONSE
+     * 
+     * @param Star_Http_Response $response
+     * @return \Star_Controller_Action 
+     */
+    protected function setResponse(Star_Http_Response $response)
+    {
+        $this->response = $response;
+        return $this;
+    }
+
+        /**
 	 * 呼叫控制器
 	 * @param unknown $method_name
 	 * @param unknown $args
@@ -67,9 +82,9 @@ class Star_Controller_Action implements Star_Controller_Action_Interface{
 	 */
 	public function __call($method_name, $args)
 	{
-		if (substr($method_name, (strlen($this->request->getActionKey()) * -1)) == ucfirst($this->request->getActionKey()))
+		if (substr($method_name, -6) == 'Action')
 		{
-			$action = substr($method_name, 0, strlen($method_name) - strlen($this->request->getActionKey()));
+			$action = substr($method_name, 0, strlen($method_name) - 6);
 			throw new Star_Exception(__CLASS__ . '::' . $action . 'Action not exists', 404);
 		}
 		throw new Star_Exception(__CLASS__ . '::' . $method_name . ' Method not exists', 500);
@@ -86,13 +101,19 @@ class Star_Controller_Action implements Star_Controller_Action_Interface{
      * @param Star_View $star_view
      * @return type 
      */
-	public function initView(Star_View $star_view)
+	public function setView(Star_View $view)
 	{
-        
-		$this->view = $star_view;
-		return $this->view;
+		$this->view = $view;
+		return $this;
 	}
     
+    public function setFrontController(Star_Controller_Front $front_contorller)
+    {
+        $this->front_controller = $front_contorller;
+        return $this;
+    }
+
+
     /**
      * 执行 request action 请求
      * 
@@ -287,7 +308,7 @@ class Star_Controller_Action implements Star_Controller_Action_Interface{
      * 
      * @return type 
      */
-    protected function isCache()
+    protected function hasCache()
     {
         return $this->view->cacheIsExpire() == true ? false : true;
     }
