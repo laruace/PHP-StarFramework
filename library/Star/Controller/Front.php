@@ -15,34 +15,29 @@
 class Star_Controller_Front{
 
     protected $display_exceptions = false; //默认不显示异常
-
-    protected $request;
-	
-	protected $response;
-    
-    protected $view;
-
-    protected $controller_directory;
-
-    protected $controller_name = '';
-	
-	protected $action_name = '';
-    
+    protected $request; //Star_Http_Request
+	protected $response; //Star_Http_Response
+    protected $view; //Star_View
+    protected $controller_directory; //controller目录
+    protected $module_valid = false; //是否配置module
+    protected $defualt_module = 'default'; //默认module
+    protected $module_controller_directoryectory_name = 'controllers'; //modules controller目录名
+    protected $module_name = ''; //module名称
+    protected $module_controller_directory = array(); //module controller目录
     protected $default_controller_name = 'index';
-
     protected $default_action_name = 'index';
-
-    protected $controller_key = 'Controller';
-    
-    protected $action_key = 'Action';
+    protected $module_key = 'module';
+    protected $controller_key = 'controller';
+    protected $action_key = 'action';
+    protected $url_delimiter = '/';
     	
-	public function __construct(Star_Http_Request $request, Star_Http_Response $response)
+	public function __construct(Star_Http_Request $request, Star_Http_Response $response, $options = array())
 	{
 		$this->request = $request;
         $this->response = $response;
-        $this->setActionName($this->request->getActionName());
-        $this->setControllerName($this->request->getControllerName());
-
+        $this->setOptions($options);
+        $params = $this->route();
+        $this->setRequestParam($params);
 	}
     
     /**
@@ -81,25 +76,113 @@ class Star_Controller_Front{
         $this->view = $view;
         return $this;
     }
-
-    /**
-     * 返回controller name
-     * 
-     * @return type 
-     */
-    public function getControllerName()
+    
+    public function isValidModule($module)
     {
-        return $this->controller_name ? $this->controller_name : $this->default_controller_name;
+        if (empty($module) || !is_string($module))
+        {
+            return false;
+        }
+        
+        if ($this->getModuleControllerDirectory($module))
+        {
+            return true;
+        } else
+        {
+            return false;
+        }
     }
     
     /**
-     * 返回action name
+     * 添加 module controller路径
+     * 
+     * @param type $directory
+     * @param type $module
+     * @return type 
+     */
+    public function addModuleControllerDirectory($directory, $module)
+    {
+        if ($module === null)
+        {
+            $module = $this->defualt_module;
+        }
+        return $this->module_controller_directory[$module] = $directory;
+    }
+    
+    /**
+     * 设置module路径
+     * 
+     * @param type $directory
+     * @return \Star_Controller_Front 
+     */
+    public function setModuleDirectory($path)
+    {
+        try{
+            $dir = new DirectoryIterator($path);
+        } catch(Exception $e) {
+            throw new Star_Exception("Directory $path not readable", 0, $e);
+        }
+
+        foreach ($dir as $file) 
+        {
+            if ($file->isDot() || !$file->isDir()) {
+                continue;
+            }
+            $module    = $file->getFilename();
+            $directory = $file->getPathname() . DIRECTORY_SEPARATOR . $this->getModuleControllerDirectoryName();
+            $this->addModuleControllerDirectory($directory, $module);
+        }
+        return $this;
+    }
+    
+    /**
+     * 设置module controller目录名
+     * 
+     * @param type $name 
+     */
+    public function setModuleControllerDirectoryName($name = 'controllers')
+    {
+        $this->module_controller_directoryectory_name = $name;
+    }
+    
+    /**
+     * 返回module controller d
      * 
      * @return type 
      */
-    public function getActionName()
+    public function getModuleControllerDirectoryName()
     {
-        return $this->action_name ? $this->action_name : $this->default_action_name;
+        return $this->module_controller_directoryectory_name;
+    }
+    
+    /**
+     * 返回module controller目录
+     * 
+     * @param type $module
+     * @return type 
+     */
+    public function getModuleControllerDirectory($module=null)
+    {
+        if ($module == null)
+        {
+            return $this->module_controller_directory;
+        } 
+        if (isset($this->module_controller_directory[$module]))
+        {
+            return $this->module_controller_directory[$module];
+        }
+        
+        return null;
+    }
+
+    /**
+     * 返回module name
+     * 
+     * @return type 
+     */
+    public function getModuleName()
+    {
+        return $this->module_name;
     }
     
     /**
@@ -144,58 +227,18 @@ class Star_Controller_Front{
         
         return $this;
 	}
-
+    
     /**
-     * 设置当前controller
+     * 设置module name
      * 
-     * @param type $controller_name 
+     * @param type $module_name
+     * @return \Star_Controller_Front 
      */
-	public function setControllerName($controller_name)
-	{
-		!empty($controller_name) && $this->controller_name = $controller_name;
-        
+    public function setModuleName($module_name)
+    {
+        !empty($module_name) && $this->module_name = $module_name;
         return $this;
-	}
-	
-    /**
-     * 设置当前action
-     * 
-     * @param type $action_name 
-     */
-	public function setActionName($action_name)
-	{
-		!empty($action_name) && $this->action_name = $action_name;
-
-        return $this;
-	}
-	
-    /**
-     * 返回当前controller
-     * 
-     * @return type 
-     */
-	public function getController()
-	{
-        empty($this->controller_name) && $this->controller_name = $this->default_controller_name;
-        
-        $controller = ucfirst($this->controller_name) . ucfirst($this->controller_key);
-        
-		return $controller;
-	}
-	
-    /**
-     * 返回当前action
-     * 
-     * @return type 
-     */
-	public function getAction()
-	{
-        empty($this->action_name) && $this->action_name = $this->default_action_name;
-        
-        $action = strtolower($this->action_name) . ucfirst($this->action_key);
-        
-		return $action;
-	}
+    }
     
     /**
      * 设置controller key
@@ -239,12 +282,23 @@ class Star_Controller_Front{
 		ob_start();
         
         try{
-            require 'Star/Controller/Action.php';
-            $this->view->setController($this->getControllerName())
-                 ->setScriptName($this->getActionName())
-                 ->setAction($this->getActionName());
-            $controller = $this->loadController(); //实例化controller
-            $action = $this->getAction(); //返回action
+            $class_name = $this->getControllerClass($this->request);
+            $this->loadClass($class_name);
+            $action_name = $this->request->getActionName();
+            if (empty($action_name))
+            {
+                $action_name = $this->default_action_name;
+                $this->request->setActionName($action_name);
+            }
+
+            $dir = dirname($this->getControllerDirectory()) . DIRECTORY_SEPARATOR . 'views';
+            //设置view
+            $this->view->setBasePath($dir)
+                       ->setController($this->request->getControllerName())
+                       ->setScriptName($this->request->getActionName())
+                       ->setAction($this->request->getActionName());
+            $action = strtolower($action_name) . ucfirst($this->action_key);
+            $controller = new $class_name($this->request, $this->response, $this->view);            
             $controller->dispatch($action); //执行action
             call_user_func(array('Star_Model_Abstract', 'Close')); //主动关闭数据库链接
         } catch (Exception $e)
@@ -256,17 +310,9 @@ class Star_Controller_Front{
 		ob_end_flush();
 	}
     
-    /**
-     * 加载controller
-     * 
-     * @param type $request
-     * @return type
-     * @throws Star_Exception 
-     */
-    public function loadController()
+    public function loadClass($controller)
     {
-        $contoller = $this->getController();
-        $file_path = Star_Loader::getFilePath(array($this->getControllerDirectory(), $contoller));
+        $file_path = Star_Loader::getFilePath(array($this->getControllerDirectory(), $controller));
 
         if (Star_Loader::isExist($file_path) == false)
         {
@@ -276,18 +322,50 @@ class Star_Controller_Front{
         //文件是否可读
         if (!Star_Loader::isReadable($file_path))
         {
-            throw new Star_Exception("Connot load controller calss {$contoller} from file {$file_path}", 500);
+            throw new Star_Exception("Connot load controller calss {$controller} from file {$file_path}", 500);
         }
         
+        require 'Star/Controller/Action.php';
         require $file_path;
         
         //类是否存在
-        if (!class_exists($contoller, false))
+        if (!class_exists($controller, false))
         {
-            throw new Star_Exception("Invalid controller class ({$contoller}) from file {$file_path}", 404);
+            throw new Star_Exception("Invalid controller class ({$controller})", 404);
         }
-
-        return new $contoller($this->request, $this->response, $this->view);
+    }
+    
+    /**
+     * 返回controller类
+     * 
+     * @param type $request
+     * @return type
+     * @throws Star_Exception 
+     */
+    public function getControllerClass(Star_Http_Request $request)
+    {
+        $controller_name = $request->getControllerName();
+        if (empty($controller_name))
+        {
+            $controller_name = $this->default_controller_name;
+            $request->setControllerName($controller_name);
+        }
+        
+        $module_name = $request->getModuleName();
+        if (empty($module_name))
+        {
+            $module_name = $this->defualt_module;
+        }
+        
+        if ($this->isValidModule($module_name))
+        {
+            $this->module_name = $module_name;
+        } else{
+            //TODO
+        }
+        
+        $controller = ucfirst($controller_name) . ucfirst($this->controller_key);
+        return $controller;
     }
     
     /**
@@ -312,8 +390,15 @@ class Star_Controller_Front{
     {
         if ($this->controller_directory == null)
         {
-            $directory_name = Star_Loader::getLoadTypeByKey($this->getControllerkey());
-            $this->controller_directory = Star_Loader::getModuleDirect($directory_name);
+            $module = $this->request->getModuleName();
+
+            if ($this->isValidModule($module))
+            {
+                $this->controller_directory = $this->getModuleControllerDirectory($module);
+            } else {
+                $directory_name = Star_Loader::getLoadTypeByKey($this->getControllerkey());
+                $this->controller_directory = Star_Loader::getModuleDirect($directory_name);
+            }
         }
         
         return $this->controller_directory;
@@ -340,7 +425,87 @@ class Star_Controller_Front{
         return $this->display_exceptions;
     }
 
-        /**
+    /**
+     * 路由
+     * 
+     * @param type $url 
+     */
+	protected function route()
+	{
+        $path = $this->request->getPathInfo();
+        $path = str_replace('\\', '/', $path);
+        $path = ltrim($path, '/');
+        $params = array();
+		if (!empty($path))
+		{	
+            $value = array();
+			$path = explode($this->url_delimiter, $path);
+			if (!empty($path))
+			{
+                if ($this->isValidModule($path[0]))
+                {
+                    $module_name = array_shift($path);
+                    $value[$this->module_key] = $module_name;
+                }
+                
+                if (count($path) && !empty($path[0]))
+                {
+                    $controller_name = array_shift($path);
+                    $value[$this->controller_key] = $controller_name;
+                }
+                
+                 if (count($path) && !empty($path[0]))
+                {
+                    $action_name = array_shift($path);
+                    $value[$this->action_key] = $action_name;
+                }
+                
+				if (!empty($path))
+                {
+                    $count = count($path);
+                    for ($i =0; $i<$count; $i = $i+2)
+                    {
+                        $params[$path[$i]] = $path[$i+1];
+                    }
+                }
+                $params = $value + $params;
+			}
+		}
+        return $params;
+	}
+    
+    /**
+     * 设置request params
+     * 
+     * @param type $params 
+     */
+    public function setRequestParam($params)
+    {
+        if (is_array($params))
+        {
+            foreach ($params as $key => $value)
+            {
+                $this->request->setParam($key, $value);
+                
+                if ($this->module_key === $key)
+                {
+                    $this->request->setModuleName($value);
+                }
+                
+                if ($this->controller_key === $key)
+                {
+                    $this->request->setControllerName($value);
+                }
+                
+                if ($this->action_key === $key)
+                {
+                    $this->request->setActionName($value);
+                }
+            }
+        }
+    }
+
+    /**
      * 处理异常
      * 
      * @param type $e

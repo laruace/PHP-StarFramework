@@ -199,7 +199,7 @@ class Star_Date {
      * @param type $date
      * @return boolean 
      */
-    public function isDate($date)
+    public static function isDate($date)
     {
         if (empty($date))
         {

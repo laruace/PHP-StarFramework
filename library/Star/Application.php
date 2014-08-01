@@ -210,7 +210,8 @@ class Star_Application {
 	{
 		$star_autoload = new Star_Loader();
 		$star_autoload->setApplicationPath($this->application_path)->setLibraryPath($library_path);
-		spl_autoload_register(array('Star_Loader', 'autoload'));
+
+		spl_autoload_register(array($star_autoload, 'autoload'));
 		return $this;
 	}
 

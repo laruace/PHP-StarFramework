@@ -14,11 +14,8 @@
 class Star_Config {
 	
 	protected $file_name;
-	
 	protected $environment;
-	
     protected $config = null;
-    
     protected static $options = array();
 
     /**
@@ -29,9 +26,7 @@ class Star_Config {
     public function __construct($file_name, $environment = '')
 	{
 		$this->file_name = $file_name;
-		
 		$this->environment = $environment;
-		
 		$this->init($file_name, $environment);
 	}
 	
@@ -42,14 +37,12 @@ class Star_Config {
 	 */
 	protected function init($file_name, $environment)
 	{
-        $config_type = ucfirst(array_pop(explode('.', $file_name)));
-        
+        $file_arr = explode('.', $file_name);
+        $config_type = ucfirst(array_pop($file_arr));
 		$class_name = "Star_Config_" . $config_type;
-        
         $class_path = "Star/Config/{$config_type}.php";
         
         require $class_path;
-        
         $this->config = new $class_name($file_name, $environment);
 	}
 	  
@@ -61,7 +54,6 @@ class Star_Config {
         if (empty(self::$options))
         {
             $options = $this->config->parseConfig();
-
             self::$options = (array) $options;
         }
 		return self::$options;

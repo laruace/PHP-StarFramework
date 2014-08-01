@@ -12,7 +12,9 @@
  */
 abstract class Star_Http_Abstract
 {
-	protected $controller_name = '';
+    protected $module_name = '';
+
+    protected $controller_name = '';
 	
 	protected $action_name = '';
 
@@ -21,6 +23,11 @@ abstract class Star_Http_Abstract
 	{
 		
 	}
+    
+    public function getModuleName()
+    {
+        return $this->module_name;
+    }
     
     public function getControllerName()
     {
@@ -32,6 +39,12 @@ abstract class Star_Http_Abstract
         return $this->action_name;
     }
 
+    public function setModuleName($module)
+    {
+        $this->module_name = $module;
+        return $this;
+    }
+    
     /**
      * 设置当前controller
      * 

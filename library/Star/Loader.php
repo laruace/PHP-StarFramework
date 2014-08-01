@@ -44,7 +44,7 @@ class Star_Loader {
      * @param type $is_once
      * @return type 
      */
-	public static function loadFile($file_name, $dir_path, $is_once = false)
+	public function loadFile($file_name, $dir_path, $is_once = false)
 	{
 		$file_path = self::getFilePath(array($dir_path, $file_name));
 		
@@ -81,7 +81,7 @@ class Star_Loader {
 		return self::$autoload_types[$key] = $value;
 	}
 	
-    public function getLoadTypeByKey($key)
+    public static function getLoadTypeByKey($key)
     {
         $key = strtolower($key);
         
@@ -93,9 +93,9 @@ class Star_Loader {
 	 *
 	 * @param $class_name
 	 */
-	public static function autoload($class_name)
+	public function autoload($class_name)
 	{
-		if (self::isClassLoader($class_name) == true)
+		if ($this->isClassLoader($class_name) == true)
 		{
 			return ;
 		}
@@ -161,7 +161,7 @@ class Star_Loader {
 		
 		$library_path = self::getLibraryPath(); //返回Star框架路径
 
-		$class_path = self::getFilePath($segments); //返回类路径
+		$class_path =self::getFilePath($segments); //返回类路径
 	
 		if (!empty($library_path))
 		{

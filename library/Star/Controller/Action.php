@@ -36,12 +36,10 @@ class Star_Controller_Action implements Star_Controller_Action_Interface{
              ->setResponse($response)
              ->setView($view);
         $star_layout = Star_Layout::getMvcInstance();
-		
         if ($star_layout instanceof Star_Layout)
         {
             $this->initLayout($star_layout);
         }
-        
 		$this->init();
 	}
 	
@@ -266,13 +264,16 @@ class Star_Controller_Action implements Star_Controller_Action_Interface{
 		$message = array(
 			'err' => $args[0],
 			'message' => $args[0] > 0 ? $args[1] : $args[2],
-			'data' => $args[0] == 0 ? $args[1] : ''
 		);
+
+        if($args[0] == 0 && isset($args[1])){
+            $message['data'] = $args[1];
+        }
 
         $this->disableLayout();
         $this->view->setNoRender();
         
-		echo json_encode($message);
+		echo isset($_GET['cb'])  && !empty($_GET['cb']) ? htmlspecialchars($_GET['cb']) . '(' . json_encode($message) . ')' : json_encode($message);
 	}
     
 	/**

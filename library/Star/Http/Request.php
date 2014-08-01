@@ -18,8 +18,6 @@ require 'Star/Http/Abstract.php';
 class Star_Http_Request extends Star_Http_Abstract
 {
     protected $params = array();
-
-    protected $url_delimiter = '/';
     
     /**
      * 构造方法
@@ -27,8 +25,6 @@ class Star_Http_Request extends Star_Http_Abstract
     public function __construct()
 	{
 		$this->params = array_merge($_POST, $_GET);
-		$uri = $this->getUri();
-		$this->parseUrl($uri);
 	}
 	
     /**
@@ -47,19 +43,19 @@ class Star_Http_Request extends Star_Http_Abstract
 	}
 	
 	/**
-	 * 获取request的访问地址
+	 * 获取request的访问路径
 	 * @return Ambigous <string, unknown, mixed>
 	 */
-	protected function getUri()
+	public function getPathInfo()
 	{
-		$uri = '';
+		$path = '';
 		
 		if (isset($_SERVER['REDIRECT_URL']) && $_SERVER['REDIRECT_URL']) //是否重定向
 		{
-			$uri = $_SERVER['REDIRECT_URL'];
+			$path = $_SERVER['REDIRECT_URL'];
             if ($_SERVER['DOCUMENT_ROOT'] != dirname($_SERVER['SCRIPT_FILENAME'])) 
             {
-                $uri = str_replace(str_replace($_SERVER['DOCUMENT_ROOT'], '', dirname($_SERVER['SCRIPT_FILENAME'])) , '', $uri); //去除目录路径
+                $path = str_replace(str_replace($_SERVER['DOCUMENT_ROOT'], '', dirname($_SERVER['SCRIPT_FILENAME'])) , '', $path); //去除目录路径
             }
             
 		} else if ($_SERVER['REQUEST_URI'])
@@ -67,14 +63,13 @@ class Star_Http_Request extends Star_Http_Abstract
             $url_info = parse_url($_SERVER['REQUEST_URI']);
             if ($_SERVER['PHP_SELF'] == $url_info['path'])
             {
-                $uri = str_replace($_SERVER['SCRIPT_NAME'], '', $url_info['path']);
+                $path = str_replace($_SERVER['SCRIPT_NAME'], '', $url_info['path']);
             } else {
-                $uri = str_replace(str_replace($_SERVER['DOCUMENT_ROOT'], '', dirname($_SERVER['SCRIPT_FILENAME'])) , '', $url_info['path']); //去除目录路径
+                $path = str_replace(str_replace($_SERVER['DOCUMENT_ROOT'], '', dirname($_SERVER['SCRIPT_FILENAME'])) , '', $url_info['path']); //去除目录路径
             }
-            $uri = ltrim($uri, '\\/');
+            $path = ltrim($path, '\\/');
 		}
-
-		return $uri;
+		return $path;
 		
 	}
     
@@ -82,7 +77,7 @@ class Star_Http_Request extends Star_Http_Abstract
      * 判断是否是缓存数据
      * @return boolean
      */
-    public function isCache()
+    public static function isCache()
     {
         if (isset($_SERVER['HTTP_IF_MODIFIED_SINCE']) && time() < strtotime($_SERVER['HTTP_IF_MODIFIED_SINCE']))
         {
@@ -208,48 +203,6 @@ class Star_Http_Request extends Star_Http_Abstract
     {
         return $_SERVER['HTTP_USER_AGENT'];
     }
-
-
-    /**
-     * 解析访问URL
-     * 
-     * @param type $url 
-     */
-	protected function parseUrl($url)
-	{
-		if (!empty($url))
-		{
-			$url = str_replace('\\', '/', $url);
-			
-			$params = explode($this->url_delimiter, $url);
-
-			if (!empty($params))
-			{
-				//剔除数组第一个值
-				if (empty($params[0]))
-				{
-					array_shift($params);
-				}
-				
-				$params = array_chunk($params, 2);
-				$app_info = array_shift($params);
-				
-				$controller_name = isset($app_info[0]) ? $app_info[0] : '';
-				$action_name = isset($app_info[1]) ? $app_info[1] : '';
-				
-				$this->setControllerName($controller_name);
-				$this->setActionName($action_name);
-				
-				if (!empty($params))
-				{
-					foreach ((array) $params as $value)
-					{
-						$this->setParam($value[0], $value[1]);
-					}
-				}
-			}
-		}
-	}
 }
 
 ?>

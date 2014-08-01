@@ -22,9 +22,9 @@ class Star_View extends Star_View_Abstract{
 	 * @param string $application_path
 	 * @param unknown $options
 	 */
-	public function __construct($application_path = '', $options = array())
+	public function __construct($options = array())
 	{
-		parent::__construct($application_path, $options);
+		parent::__construct($options);
 	}
 	
 	/**
@@ -33,12 +33,7 @@ class Star_View extends Star_View_Abstract{
 	 */
 	protected function run()
 	{
-        if ($this->getBasePath() == null)
-        {
-            $base_path = Star_Loader::getDirPath(array($this->application_path, $this->default_view));
-
-            $this->setBasePath($base_path);
-        }
+        
 	}
 	
     /**

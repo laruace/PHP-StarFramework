@@ -40,6 +40,10 @@ class Star_Log {
 
         if (self::$file_path)
         {
+            if(!is_dir(self::$file_path))
+            {
+                mkdir(self::$file_path, 0775, true);
+            }
             $file_path = Star_Loader::getFilePath(array(self::$file_path,  $file_name), '.txt');
         } else
         {

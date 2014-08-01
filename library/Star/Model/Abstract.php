@@ -157,7 +157,12 @@ abstract class Star_Model_Abstract
 	
 	public function query($sql)
 	{
-		return $this->getAdapter()->query($sql);
+        if ($this->getAdapter()->isSelect() == true)
+        {
+            return $this->getAdapter()->query($sql);
+        } else{
+            return $this->getDefaultAdapter()->query($sql);
+        }
 	}
     
     /**

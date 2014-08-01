@@ -262,20 +262,40 @@ class Star_Model_Mysqli_Abstract implements Star_Model_Interface
     public function query($sql)
     {
         $result = $this->_query($sql);
-     
-        $data = array();
         
-        while ($rs = $result->fetch_assoc())
-		{
-			$data[] = $rs;
-		}
-        
-        $result->free();
-        
-        return $data;
+        if ($this->isSelect($sql) == true)
+        {
+            $data = array();
+            while ($rs = $result->fetch_assoc())
+            {
+                $data[] = $rs;
+            }
+            $result->free();
+            return $data;
+        } else {
+            return $this->rowCount();
+        }
     }
-	
-	/**
+    
+    /**
+     * 判断是否是查询sql
+     * 
+     * @param type $sql 
+     */
+    public function isSelect($sql)
+    {
+        $sql = trim($sql);
+        if (strtoupper(substr($sql, 0, 6)) == 'SELECT')
+        {
+            return true;
+        } else
+        {
+            return false;
+        }
+    }
+
+
+    /**
 	 * 返回影响行数
 	 */
 	public function rowCount()

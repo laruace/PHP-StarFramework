@@ -27,10 +27,10 @@ abstract class Star_View_Abstract {
     protected $_postfix = '.phtml'; //后缀
 	
 	protected $_theme_name = 'scripts';
+
+    protected $_template_name = 'templates';
 	
 	protected $layout = '';
-	
-	protected $application_path;
 	
 	protected $default_view = 'views';
 	
@@ -60,10 +60,8 @@ abstract class Star_View_Abstract {
      * @param string $application_path
      * @param unknown $options
      */
-    public function __construct($application_path = '', $options = array())
-	{
-		$this->application_path = $application_path;
-		
+    public function __construct($options = array())
+	{	
 		$this->setOption($options);
 		
 		$this->run();
@@ -196,12 +194,11 @@ abstract class Star_View_Abstract {
 		}
         
         array_push($view_segments, $this->_script_name);
-        
         $view_path = Star_Loader::getFilePath($view_segments, $this->_postfix);
 
 		return $view_path;
 	}
-	
+
     /**
      * 设置网站编码
      * 
@@ -751,7 +748,7 @@ abstract class Star_View_Abstract {
     public function getCacheFileName()
     {
         $segments = array(
-            $this->application_path,
+            $this->_base_name,
             $this->cache_directory,
             $this->_controller,
             $this->_action,
@@ -781,8 +778,38 @@ abstract class Star_View_Abstract {
     }
     
     public function __get($name) {
-        return $this->assign[$name];
+        return isset($this->assign[$name]) ? $this->assign[$name] : '';
     }
+
+    /**
+     * 导入模板
+     * @param $file_name
+     * @return type
+     */
+    public function loadTemplate($file_name){
+
+        $view_path = $this->getTemplatePath($file_name);
+        if (!is_file($view_path))
+        {
+            throw new Star_Exception( $view_path . ' not found', 500);
+
+            exit;
+        }
+        $view_path = realpath($view_path);
+        include $view_path;
+    }
+
+    /**
+     * 获取模板绝对地址
+     * @param $file_name
+     * @return type
+     */
+    private function getTemplatePath($file_name){
+        $view_segments = array($this->_base_name, $this->_template_name,$file_name);
+        $view_path = Star_Loader::getFilePath($view_segments, $this->_postfix);
+        return $view_path;
+    }
+
 }
 
 ?>

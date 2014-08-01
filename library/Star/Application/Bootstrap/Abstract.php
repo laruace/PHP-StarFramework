@@ -28,10 +28,10 @@ abstract class Star_Application_Bootstrap_Abstract
 	{
         $this->initRequest();
         $this->initResponse();
-        $this->initFrontController();
         $this->setApplication($application);
         $options = $application->getOptions();
         $this->setOptions($options);
+        $this->initFrontController();
 	}
 
     /**
@@ -244,8 +244,11 @@ abstract class Star_Application_Bootstrap_Abstract
      */
     protected function initFrontController()
     {
-        $front = new Star_Controller_Front($this->request, $this->response);
-        $this->front = $front;
+        if ($this->front instanceof Star_Controller_Front == false)
+        {
+            $front = new Star_Controller_Front($this->request, $this->response);
+            $this->front = $front;
+        }
     }
 
     /**
@@ -258,7 +261,7 @@ abstract class Star_Application_Bootstrap_Abstract
 	protected function setView($options)
 	{
         require 'Star/View.php';
-		$this->view = new Star_View($this->getApplication()->getApplicationPath(), $options);
+		$this->view = new Star_View($options);
 		
 		return $this;
 	}
@@ -292,7 +295,7 @@ abstract class Star_Application_Bootstrap_Abstract
      */
     public function setFrontController($options)
     {
-        $this->front->setOptions($options);
+        $this->front = new Star_Controller_Front($this->request, $this->response, $options);
         return $this;
     }
 }
