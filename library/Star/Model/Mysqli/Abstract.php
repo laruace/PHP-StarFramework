@@ -94,15 +94,10 @@ class Star_Model_Mysqli_Abstract implements Star_Model_Interface
 	public function insert($table, Array $data)
 	{
 		$columns = array_keys($data); //表字段
-		
 		$columns = $this->quoteIdentifier($columns);
-		
 		$data = $this->quoteIdentifier($data, true);
-		
 		$sql = 'INSERT INTO ' . $this->quoteIdentifier($table) . '(' . implode(',', $columns) . ') VALUES (' . implode(',', $data) . ')';
-		
 		$this->_query($sql);
-		
 		return $this->db->insert_id;
 	}
 	
@@ -121,9 +116,7 @@ class Star_Model_Mysqli_Abstract implements Star_Model_Interface
 		}
 		
 		$sql = 'UPDATE ' . $this->quoteIdentifier($table) . ' SET ' . implode(',', $data) . ' WHERE ' . $where;
-
 		$this->_query($sql);
-		
 		return $this->rowCount();
 		
 	}
@@ -135,9 +128,7 @@ class Star_Model_Mysqli_Abstract implements Star_Model_Interface
 	public function delete($table, $where)
 	{
 		$sql = 'DELETE FROM ' . $table . ' WHERE ' . $where;
-		
 		$this->_query($sql);
-		
 		return $this->rowCount();
 	}
     
@@ -155,7 +146,6 @@ class Star_Model_Mysqli_Abstract implements Star_Model_Interface
     protected function getSql($where, $conditions, $table, $order = null, $page = 1, $page_size = 1)
     {
         $select = $this->select();
-        
         $select->from($table, $conditions)->where($where);
         
         if ($order != null)
@@ -189,7 +179,6 @@ class Star_Model_Mysqli_Abstract implements Star_Model_Interface
         }
 		
 		$result = $this->_query($sql);
-		
         $data = array();
 		
 		while ($rs = $result->fetch_assoc())
@@ -198,7 +187,6 @@ class Star_Model_Mysqli_Abstract implements Star_Model_Interface
 		}
 		
 		$result->free();
-		
 		return $data;
 	}
 	
@@ -213,18 +201,14 @@ class Star_Model_Mysqli_Abstract implements Star_Model_Interface
 		if ($where instanceof Star_Model_Mysqli_Select)
 		{
 			$where->limit(1);
-			
 			$sql = $where->assemble();
 		} else {
             $sql = $this->getSql($where, $conditions, $table, $order);
         }
 
-		 $result = $this->_query($sql);
-	
+		$result = $this->_query($sql);
 		$data = $result->fetch_assoc();
-        
         $result->free();
-		
 		return is_array($data) ? current($data) : '';
 	}
 	
@@ -244,25 +228,20 @@ class Star_Model_Mysqli_Abstract implements Star_Model_Interface
         }
 		
 		$result = $this->_query($sql);
-		
 		$data = $result->fetch_assoc();
-        
         $result->free();
-		
 		return $data;
 	}
 	
 	public function fetchCol($where, $conditions = null , $table = null)
 	{
 		$data = $this->fetchAll($where, $conditions = null , $table = null);
-		
 		return $data;
 	}
     
     public function query($sql)
     {
         $result = $this->_query($sql);
-        
         if ($this->isSelect($sql) == true)
         {
             $data = array();
@@ -315,7 +294,6 @@ class Star_Model_Mysqli_Abstract implements Star_Model_Interface
         }
         
 		$resource = $this->db->query($sql);
-        
         if ($resource === false)
         {
             throw new Star_Exception("SQL: ". $sql . " \nError Message:" . $this->db->error, 500);
@@ -330,9 +308,7 @@ class Star_Model_Mysqli_Abstract implements Star_Model_Interface
             if ($time >= $this->slow_query_time) //慢查询日志
             {
                 $stact_trace = Star_Debug::Trace(); //返回堆栈详细信息
-                
                 $stact_trace = implode("\n", $stact_trace);
-
                 Star_Log::log("Query_time: {$time}s     Slow query: {$sql} \nStack trace:\n{$stact_trace}", 'slow_query'); //记录慢查询日志
             }
         }

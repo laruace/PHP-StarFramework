@@ -106,7 +106,6 @@ class Star_String {
     public static function strLength($str)
     {
         $str = trim(htmlspecialchars($str, ENT_QUOTES));
-        
         return mb_strlen($str, 'utf-8');
     }
     

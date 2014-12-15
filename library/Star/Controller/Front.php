@@ -77,6 +77,12 @@ class Star_Controller_Front{
         return $this;
     }
     
+    /**
+     * module是否存在
+     * 
+     * @param type $module
+     * @return boolean 
+     */
     public function isValidModule($module)
     {
         if (empty($module) || !is_string($module))
@@ -117,20 +123,28 @@ class Star_Controller_Front{
      */
     public function setModuleDirectory($path)
     {
-        try{
-            $dir = new DirectoryIterator($path);
-        } catch(Exception $e) {
-            throw new Star_Exception("Directory $path not readable", 0, $e);
-        }
-
-        foreach ($dir as $file) 
+        if (is_string($path))
         {
-            if ($file->isDot() || !$file->isDir()) {
-                continue;
+            try{
+                $dir = new DirectoryIterator($path);
+            } catch(Exception $e) {
+                throw new Star_Exception("Directory $path not readable", 500);
             }
-            $module    = $file->getFilename();
-            $directory = $file->getPathname() . DIRECTORY_SEPARATOR . $this->getModuleControllerDirectoryName();
-            $this->addModuleControllerDirectory($directory, $module);
+
+            foreach ($dir as $file) 
+            {
+                if ($file->isDot() || !$file->isDir()) {
+                    continue;
+                }
+                $module    = $file->getFilename();
+                $directory = $file->getPathname() . DIRECTORY_SEPARATOR . $this->getModuleControllerDirectoryName();
+                $this->addModuleControllerDirectory($directory, $module);
+            }
+        } else if (is_array($path)){
+            foreach ($path as $module => $directory)
+            {
+                $this->addModuleControllerDirectory($directory, $module);
+            }
         }
         return $this;
     }
@@ -485,21 +499,20 @@ class Star_Controller_Front{
         {
             foreach ($params as $key => $value)
             {
-                $this->request->setParam($key, $value);
-                
-                if ($this->module_key === $key)
+                switch ($key)
                 {
-                    $this->request->setModuleName($value);
-                }
-                
-                if ($this->controller_key === $key)
-                {
-                    $this->request->setControllerName($value);
-                }
-                
-                if ($this->action_key === $key)
-                {
-                    $this->request->setActionName($value);
+                    case $this->module_key:
+                        $this->request->setModuleName($value);
+                        break;
+                    case $this->controller_key:
+                        $this->request->setControllerName($value);
+                        break;
+                    case $this->action_key:
+                        $this->request->setActionName($value);
+                        break;
+                    default :
+                        $this->request->setParam($key, $value);
+                        break;
                 }
             }
         }

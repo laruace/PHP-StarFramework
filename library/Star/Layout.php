@@ -70,7 +70,6 @@ class Star_Layout {
 	public function enableLayout()
 	{
 		$this->enabled = true;
-		
 		return $this;
 	}
 	
@@ -82,7 +81,6 @@ class Star_Layout {
 	public function disableLayout()
 	{
 		$this->enabled = false;
-		
 		return $this;
 	}
 	
@@ -157,25 +155,18 @@ class Star_Layout {
 	public function setView(Star_View $view)
 	{
 		$this->view = $view;
-		
 		$this->view->setLayout($this);
-		
 		return $this;
 	}
 	
 	public function render()
 	{
-		$view = $this->getView();
-        
-        if ($view instanceof Star_View)
+        if ($this->view instanceof Star_View)
         {
-            $view->setBasePath($this->layout_base_path);
-		
-            $view->setTheme($this->layout_script_path);
-
-            $view->setScriptName($this->layout, false);
-
-            $view->setRender()->loadView();
+            $this->view->setBasePath($this->layout_base_path);
+            $this->view->setTheme($this->layout_script_path);
+            $this->view->setScriptName($this->layout, false);
+            $this->view->setRender()->loadView();
             
         } else
         {

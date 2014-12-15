@@ -117,7 +117,6 @@ abstract class Star_Model_Abstract
 	public function insert(array $data, $table = null)
 	{
         empty($table) && $table = $this->getTableName();
-        
 		return $this->getDefaultAdapter()->insert($this->getTableName(), $data);
 	}
 
@@ -133,9 +132,7 @@ abstract class Star_Model_Abstract
 	public function update($where, Array $data, $table = null, $quote_indentifier = true)
 	{
         empty($table) && $table = $this->getTableName();
-        
 		$where = $this->setWhere($where);
-		
 		return $this->getDefaultAdapter()->update($table, $where, $data, $quote_indentifier);
 	}
 	
@@ -149,9 +146,7 @@ abstract class Star_Model_Abstract
 	public function delete($where, $table = null)
 	{
         empty($table) && $table = $this->getTableName();
-        
 		$where = $this->setWhere($where);
-		
 		return $this->getDefaultAdapter()->delete($table, $where);
 	}
 	
@@ -175,9 +170,7 @@ abstract class Star_Model_Abstract
     public function getPk($pk_id, $table = null)
     {
         empty($table) && $table = $this->getTableName();
-        
         $where = $this->setWhere($pk_id);
-        
         return $this->getAdapter()->fetchRow($where, '*', $table);
     }
 	
@@ -231,9 +224,7 @@ abstract class Star_Model_Abstract
 	public function fetchCol($where, $conditions = '*' , $table = null)
 	{
 		$rs = $this->getAdapter()->fetchAll($where, $conditions , $table);
-		
 		$data = array();
-
 		if (!empty($rs) && is_array($rs))
 		{
 			foreach ($rs as $value)
@@ -241,7 +232,6 @@ abstract class Star_Model_Abstract
 				$data[] = $value[$this->_primary];
 			}
 		}
-		
 		return $data;
 	}
 	

@@ -20,7 +20,6 @@ class Star_Debug {
     public static function dump($data)
     {
         var_dump($data);
-        
         exit;
     }
     
@@ -32,11 +31,8 @@ class Star_Debug {
     public static function Trace()
     {
         $trace_info = debug_backtrace();
-        
         array_shift($trace_info);
-        
         $stact_trace = array_map(array('Star_Debug', 'traceMessage'), $trace_info);
-        
         return $stact_trace;   
     }
     

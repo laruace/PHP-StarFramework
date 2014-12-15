@@ -21,7 +21,7 @@ class Star_Application_Bootstrap_Bootstrap extends Star_Application_Bootstrap_Ab
     /**
 	 * 构造方法
 	 */
-	public function __construct($application)
+	public final function __construct($application)
 	{
 		parent::__construct($application);
 	}
@@ -53,8 +53,6 @@ class Star_Application_Bootstrap_Bootstrap extends Star_Application_Bootstrap_Ab
                 }
             }
         }
-
-        $this->initView();
 	}
     
     public function run()

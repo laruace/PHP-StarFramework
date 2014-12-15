@@ -13,15 +13,11 @@
 class Star_Loader {
 
 	protected static $app_path = null;
-	
 	protected static $library_path = null;
-    
     protected static $autoload_types = array(
 		'service' => 'services',
 		'controller' => 'controllers',
 		'model' => 'models',
-        'api' => 'apis',
-        'crontab' => 'crontabs'
 	);
 	
 	public function __construct()
@@ -32,7 +28,6 @@ class Star_Loader {
 	public function setApplicationPath($app_path)
 	{
 		self::$app_path = $app_path;
-		
 		return $this;
 	}
 	
@@ -84,7 +79,6 @@ class Star_Loader {
     public static function getLoadTypeByKey($key)
     {
         $key = strtolower($key);
-        
         return self::$autoload_types[$key];
     }
     
@@ -109,7 +103,6 @@ class Star_Loader {
                 if (!file_exists($class_path))
                 {
                     trigger_error('Not found file ' . $class_path, E_USER_ERROR);
-                    
                     return;
                 }
                 
@@ -160,9 +153,7 @@ class Star_Loader {
 		}
 		
 		$library_path = self::getLibraryPath(); //返回Star框架路径
-
 		$class_path =self::getFilePath($segments); //返回类路径
-	
 		if (!empty($library_path))
 		{
 			$file_path = self::getDirPath(array($library_path, $class_path));
@@ -237,7 +228,6 @@ class Star_Loader {
     public static function getFilePath(array $segments, $postfix = '.php', $dir_separator = DIRECTORY_SEPARATOR)
     {
         $path = implode($dir_separator, $segments);
-        
         return $path . $postfix;
     }
     
@@ -250,7 +240,6 @@ class Star_Loader {
     public static function getDirPath(array $segments, $dir_separator = DIRECTORY_SEPARATOR)
     {
         $path = implode($dir_separator, $segments);
-        
         return $path;
     }
     

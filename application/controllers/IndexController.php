@@ -4,7 +4,7 @@ class IndexController extends Star_Controller_Action
 {
     public function init()
 	{
-		
+		//$this->setNoRender();
 	}
 	
 	public function indexAction()
@@ -39,7 +39,7 @@ class IndexController extends Star_Controller_Action
         //$this->view->setNoRender();
         //$this->render('hello');
 	}
-	
+    
 	public function helloAction()
 	{
         $this->view->title = 'Hello world';

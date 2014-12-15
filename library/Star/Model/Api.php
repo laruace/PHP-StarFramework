@@ -32,11 +32,9 @@ Class Star_Model_Api
         if (is_array($options))
         {
             $methods = get_class_methods(__CLASS__);
-
             foreach ($options as $key => $option)
             {
                 $method = 'set' . ucfirst($key);
-                
                 if (in_array($method, $methods))
                 {
                     $this->$method($option);
@@ -58,7 +56,6 @@ Class Star_Model_Api
     public function api($script_name, $params, $method = 'get', $cookie = array(), $protocol = 'http', $timeout = 30)
     {
         $query_string = $this->getQueryString($params);
-        
         $cookie_string = $this->getCookieString($cookie);
         
         if (strcmp($protocol . "://", substr($script_name, 0, strlen($protocol . "://"))) !== 0)
@@ -69,7 +66,6 @@ Class Star_Model_Api
         }
         
         $ch = curl_init();
-
 	    if ('GET' == strtoupper($method))
 	    {
 		    curl_setopt($ch, CURLOPT_URL, "$url?$query_string");
@@ -123,7 +119,6 @@ Class Star_Model_Api
 	    }
 	    
        	curl_close($ch);
-        
         return json_decode($rs, true);
     }
     
@@ -144,7 +139,6 @@ Class Star_Model_Api
 	        array_push($query_string, rawurlencode($key) . '=' . rawurlencode($value));
 	    }   
 	    $query_string = join('&', $query_string);
-        
 	    return $query_string;
     }
     

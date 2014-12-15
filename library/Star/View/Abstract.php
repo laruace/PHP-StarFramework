@@ -13,46 +13,25 @@
 abstract class Star_View_Abstract {
 	
 	protected $_script_name = '';
-	
 	protected $_base_name = '';
-	
 	protected $_is_controller = true;
-	
 	protected $_is_display = true; //是否显示view
-	
 	protected $_controller; 
-    
     protected $_action;
-
     protected $_postfix = '.phtml'; //后缀
-	
 	protected $_theme_name = 'scripts';
-
     protected $_template_name = 'templates';
-	
 	protected $layout = '';
-	
 	protected $default_view = 'views';
-	
 	protected $encoding = 'UTF-8'; //默认编码
-    
     protected $static_options = array(); //静态资源配置
-
     protected $js_options = array(); //js配置
-    
     protected $css_options = array(); //css配置
-
     protected $is_cache = false; //页面是否缓存
-    
     protected $timeout = 600; //默认缓存时间
-    
     protected $cache_directory = 'caches'; //缓存目录
-    
     protected $cache_name = 'index'; //缓存名
-    
     protected $is_flush = false; //是否强制刷新缓存
-
-
     protected $assign = array();
 
     /**
@@ -63,7 +42,6 @@ abstract class Star_View_Abstract {
     public function __construct($options = array())
 	{	
 		$this->setOption($options);
-		
 		$this->run();
 	}
 	
@@ -83,9 +61,7 @@ abstract class Star_View_Abstract {
 	public function setScriptName($script_name, $is_controller = true)
 	{
 		$this->_is_controller = $is_controller;
-		
 		$this->_script_name = $script_name;
-		
 		return $this;
 	}
 	
@@ -111,7 +87,6 @@ abstract class Star_View_Abstract {
 	public function setNoRender()
 	{
 		$this->_is_display = false;
-		
 		return $this;
 	}
     
@@ -122,7 +97,6 @@ abstract class Star_View_Abstract {
     public function setRender()
     {
         $this->_is_display = true;
-        
         return $this;
     }
 	
@@ -134,7 +108,6 @@ abstract class Star_View_Abstract {
 	public function setBasePath($base_path)
 	{
 		$this->_base_name = $base_path;
-		
 		return $this;
 	}
 	
@@ -164,7 +137,6 @@ abstract class Star_View_Abstract {
 	public function setController($controller)
 	{
 		$this->_controller = $controller;
-		
 		return $this;
 	}
     
@@ -176,7 +148,6 @@ abstract class Star_View_Abstract {
     public function setAction($action)
     {
         $this->_action = $action;
-        
         return $this;
     }
 	
@@ -187,7 +158,6 @@ abstract class Star_View_Abstract {
 	private function getViewPath()
 	{
         $view_segments = array($this->_base_name, $this->_theme_name);
-
 		if ($this->_is_controller == true)
 		{           
             array_push($view_segments, $this->_controller);
@@ -195,7 +165,6 @@ abstract class Star_View_Abstract {
         
         array_push($view_segments, $this->_script_name);
         $view_path = Star_Loader::getFilePath($view_segments, $this->_postfix);
-
 		return $view_path;
 	}
 
@@ -208,7 +177,6 @@ abstract class Star_View_Abstract {
 	public function setEncoding($encoding)
 	{
 		$this->encoding = $encoding;
-		
 		return $this;
 	}
 	
@@ -243,7 +211,6 @@ abstract class Star_View_Abstract {
 		}
 		
 		$view_path = realpath($view_path);
-		
 		include $view_path;
 	}
 	
@@ -255,7 +222,6 @@ abstract class Star_View_Abstract {
 	public function setTheme($theme)
 	{
 		$this->_theme_name = $theme;
-		
 		return $this;
 	}
 	
@@ -285,7 +251,6 @@ abstract class Star_View_Abstract {
 	public function setLayout(Star_Layout $star_layout)
 	{
 		$this->layout = $star_layout;
-		
 		return $this;
 	}
 	
@@ -332,7 +297,6 @@ abstract class Star_View_Abstract {
     public function setJsBasePath($path)
     {
         $this->js_options['base_path'] = $path;
-        
         return $this;
     }
     
@@ -345,7 +309,6 @@ abstract class Star_View_Abstract {
     public function setCssBasePath($path)
     {
         $this->css_options['base_path'] = $path;
-        
         return $this;
     }
     
@@ -370,7 +333,6 @@ abstract class Star_View_Abstract {
     public function setJsVersion($version)
     {
         $this->js_options['version'] = $version;
-        
         return $this;
     }
     
@@ -394,7 +356,6 @@ abstract class Star_View_Abstract {
     public function setJsFiles($files)
     {
         $this->js_options['files'] = array_merge((array) $this->js_options['files'], (array) $files);
-
         return $this;
     }
     
@@ -558,7 +519,6 @@ abstract class Star_View_Abstract {
         $css_html = '';
         $base_path = $this->getCssBasePath();
         $version = $this->getCssVersion();
-        
         if (isset($this->css_options['files']) && !empty($this->css_options['files'])) 
         {
             foreach ((array) $this->css_options['files'] as $file_name)
@@ -598,7 +558,6 @@ abstract class Star_View_Abstract {
     public function setCacheTimeout($timeout)
     {
         $this->timeout = (int) $timeout;
-        
         return $this;
     }
     

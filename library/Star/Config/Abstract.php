@@ -22,7 +22,6 @@ Abstract class Star_Config_Abstract {
 	public function __construct($file_name, $environment = '')
 	{
 		$this->file_name = $file_name;
-		
 		$this->environment = $environment;
         
 	}
@@ -33,7 +32,6 @@ Abstract class Star_Config_Abstract {
 	public function loadConfig()
 	{
 		$options = $this->parseConfig();
-
 		return (array) $options;
 	}
     

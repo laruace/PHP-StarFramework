@@ -38,9 +38,7 @@ class Star_Application {
 	public function __construct($application_env, $application_path, $config_file, $library_path = '')
 	{
 		$this->application_path = $application_path;
-
 		$this->setAutoload($library_path);
-        
 		$star_config = new Star_Config($config_file, $application_env);
 		$options = $star_config->loadConfig();
 		$this->setOptions($options);
@@ -210,7 +208,6 @@ class Star_Application {
 	{
 		$star_autoload = new Star_Loader();
 		$star_autoload->setApplicationPath($this->application_path)->setLibraryPath($library_path);
-
 		spl_autoload_register(array($star_autoload, 'autoload'));
 		return $this;
 	}

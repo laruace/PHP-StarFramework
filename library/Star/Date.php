@@ -23,7 +23,6 @@ class Star_Date {
     public static function dateToTime($date, $is_first = true)
     {
         list($year, $month, $day) = explode('-', $date);
-
         return $is_first == true ? mktime(0, 0, 0, $month, $day, $year) : mktime(23, 59, 59, (int) $month, (int) $day, (int) $year);
     }
     
@@ -90,18 +89,13 @@ class Star_Date {
     public static function getLastWeek($is_first = true)
     {
         $now_time = time();
-        
         $week = date('w', $now_time); //星期几
-        
         list($year, $month, $day) = explode('-', date('Y-m-d', $now_time - ($week + 7 - 1) * 86400));
-        
         $time = mktime(0, 0, 0, $month, $day, $year);
-        
         if ($is_first == false)
         {
             $time += 7 * 86400 - 1;
         }
-       
        return $time;
     }
     
@@ -114,7 +108,6 @@ class Star_Date {
     public static function getLastMonth($is_first = true)
     {
         $now_time = time();
-        
         list($year, $month) = explode('-', date('Y-m', ($now_time - ((date('d', $now_time) + 1) * 86400)))); //返回上个月年月
 
         if ($is_first == true)
@@ -122,7 +115,6 @@ class Star_Date {
             $time = mktime(0, 0, 0, $month, 1, $year);
         } else {
             $days = cal_days_in_month(CAL_GREGORIAN, $month, $year); //上个月总共天数
-            
             $time = mktime(23, 59, 59, $month, $days, $year);
         }
         
@@ -157,7 +149,6 @@ class Star_Date {
     public static function getThisMonth()
     {
         list($year, $month, $day) = explode('-', date('Y-m-d', time()));
-        
         return mktime(0, 0, 0, $month, 1, $year);
     }
     
@@ -169,7 +160,6 @@ class Star_Date {
     public static function getToday()
     {
         list($year, $month, $day) = explode('-', date('Y-m-d', time()));
-        
         return mktime(0, 0, 0, $month, $day, $year);
     }
     

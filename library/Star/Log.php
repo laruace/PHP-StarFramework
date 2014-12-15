@@ -31,11 +31,8 @@ class Star_Log {
     public static function log($message, $type = 'error')
     {
         $now = time();
-        
         $time = date('Y-m-d H:i:s', $now);
-        
         $file_name = "{$type}_" . date('Ymd', $now);
-        
         $message = "\n{$time}:  {$message}";
 
         if (self::$file_path)
@@ -48,7 +45,6 @@ class Star_Log {
         } else
         {
             $directory = Star_Loader::getModuleDirect(self::$directory_name);
-        
             if (!is_dir($directory))
             {
                 mkdir($directory, 0775, true);
@@ -58,9 +54,7 @@ class Star_Log {
         }
 
         $handle = fopen($file_path, self::$model, false);
-        
         fwrite($handle, $message);
-        
         fclose($handle);
     }
     

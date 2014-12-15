@@ -35,9 +35,7 @@ class Star_Cache_Memcached implements Star_Cache_Interface {
 		if ($config['multi_cache'] == true)
 		{
 			$this->memcached->addServers($config['server']);
-			
 			$this->memcached->setOption(Memcached::OPT_DISTRIBUTION, Memcached::DISTRIBUTION_CONSISTENT);
-			
 			$this->memcached->setOption(Memcached::OPT_HASH, Memcached::HASH_CRC);
 		} else
 		{

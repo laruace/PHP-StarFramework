@@ -44,14 +44,12 @@ class Star_Config_Php extends Star_Config_Abstract{
 		}
 		
 		$options = include($this->file_name);
-	
 		if (!array_key_exists($this->environment, $options))
 		{
 			throw new Star_Exception('Not fount environment set');
 		}
 
 		$config = $options[$this->environment];
-
 		return $config;
 	}
 	

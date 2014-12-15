@@ -46,12 +46,11 @@ class Star_View extends Star_View_Abstract{
         if (!empty($options))
         {
             $methods = get_class_methods($this);
-
+            $methods = array_flip($methods);
             foreach ($options as $method => $option)
             {
                 $method = "set" . ucfirst($method);
-
-                if (in_array($method, $methods))
+                if (isset($methods[$method]))
                 {
                     call_user_func(array($this, $method), $option);
                 }

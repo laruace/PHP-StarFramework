@@ -25,7 +25,6 @@ class Star_Cache_Redis implements Star_Cache_Interface {
 	public function __construct(array $config)
 	{
 		$this->redis = new Redis();
-        
         $this->redis->connect($config['host'], $config['port']);
 	}
 	

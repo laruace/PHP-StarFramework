@@ -37,7 +37,6 @@ class Star_Config_Ini extends Star_Config_Abstract{
 		{
 			throw new Star_Exception('not found: ' . $this->file_name . ' file');
 		}
-		
 		$ini_array = parse_ini_file($this->file_name, true);
 		
 		if (!array_key_exists($this->environment, $ini_array))
@@ -46,7 +45,6 @@ class Star_Config_Ini extends Star_Config_Abstract{
 		}
 
 		$ini_array = $ini_array[$this->environment];
-		
 		$configs = array();
 
 		if (!empty($ini_array) && is_array($ini_array))

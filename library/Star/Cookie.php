@@ -36,7 +36,6 @@ class Star_Cookie {
     public static function set($name, $value , $expire = 0, $path = '/', $domain = '')
     {
         empty($domain) && $domain = self::$domain;
-        
         setcookie($name, $value, $expire, $path, $domain);
     }
     

@@ -272,7 +272,6 @@ class Star_Controller_Action implements Star_Controller_Action_Interface{
 
         $this->disableLayout();
         $this->view->setNoRender();
-        
 		echo isset($_GET['cb'])  && !empty($_GET['cb']) ? htmlspecialchars($_GET['cb']) . '(' . json_encode($message) . ')' : json_encode($message);
 	}
     
@@ -282,7 +281,6 @@ class Star_Controller_Action implements Star_Controller_Action_Interface{
     protected function setNoRender()
     {
         $this->view->setNoRender();
-        
         $this->disableLayout();
     }
     

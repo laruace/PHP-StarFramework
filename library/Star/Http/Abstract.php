@@ -53,7 +53,6 @@ abstract class Star_Http_Abstract
 	public function setControllerName($controller_name)
 	{
 		!empty($controller_name) && $this->controller_name = $controller_name;
-        
         return $this;
 	}
 	
@@ -65,7 +64,6 @@ abstract class Star_Http_Abstract
 	public function setActionName($action_name)
 	{
 		!empty($action_name) && $this->action_name = $action_name;
-
         return $this;
 	}
 }
