@@ -221,17 +221,9 @@ abstract class Star_Model_Abstract
      * @param null $table
      * @return type 
      */
-	public function fetchCol($where, $conditions = '*' , $table = null)
+	public function fetchCol($where, $conditions = '*', $table = null, $order = null, $page = null, $page_size = null)
 	{
-		$rs = $this->getAdapter()->fetchAll($where, $conditions , $table);
-		$data = array();
-		if (!empty($rs) && is_array($rs))
-		{
-			foreach ($rs as $value)
-			{
-				$data[] = $value[$this->_primary];
-			}
-		}
+		$data = $this->getAdapter()->fetchCol($where, $conditions = '*', $table = null, $order = null, $page = null, $page_size = null);
 		return $data;
 	}
 	
@@ -411,6 +403,32 @@ abstract class Star_Model_Abstract
     	
     	return $where;
     }
+    
+    /**
+	 * 开始事务执行
+	 */
+	public function beginTransaction()
+	{
+		$this->getDefaultAdapter()->beginTransaction();
+	}
+    
+    /**
+	 * mysql操作回滚
+	 * @return boolean
+	 */
+	public function rollback()
+	{
+		return $this->getDefaultAdapter()->rollback();
+	}
+    
+    /**
+	 * 提交事务
+	 * @return boolean
+	 */
+	public function commit()
+	{
+		return $this->getDefaultAdapter()->commit();
+	}
     
     /**
      * 返回分表表名

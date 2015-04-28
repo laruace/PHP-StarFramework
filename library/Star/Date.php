@@ -13,6 +13,16 @@
  */
 class Star_Date {
 	
+    public static function time()
+    {
+        return $_SERVER['REQUEST_TIME'];
+    }
+    
+    public static function date($time = '')
+    {
+        return date('Y-m-d', $time > 0 ? $time : $_SERVER['REQUEST_TIME']);
+    }
+    
     /**
      * 日期转换为时间戳
      * 

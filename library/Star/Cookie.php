@@ -33,10 +33,10 @@ class Star_Cookie {
      * @param string $path
      * @param string $domain
      */
-    public static function set($name, $value , $expire = 0, $path = '/', $domain = '')
+    public static function set($name, $value , $expire = 0, $path = '/', $domain = '', $secure = false, $http_only = false)
     {
         empty($domain) && $domain = self::$domain;
-        setcookie($name, $value, $expire, $path, $domain);
+        setcookie($name, $value, $expire, $path, $domain, $secure, $http_only);
     }
     
     /**

@@ -233,7 +233,7 @@ class Star_String {
      * @param type $username
      * @return boolean 
      */
-    public function isUsername($username)
+    public static function isUsername($username)
     {
         //用户名只能以数字或字母开头6-16个字符
         if (preg_match('/^[a-z0-9][a-z0-9_\.]{5,15}$/i', $username))
@@ -242,6 +242,33 @@ class Star_String {
         } else{
             return false;
         }
+    }
+    
+    /**
+     * 替换html不安全标签
+     * 
+     * @param type $str
+     * @return type 
+     */
+    public static function stripHtmlTags($str)
+    {
+        $regulars = array(                                                                       
+            "/<(\/?)(script|i?frame|style|html|body|title|link|meta)([^>]*?)>/isU",   
+            "/(<[^>]*)on[a-zA-Z]+s*=([^>]*>)/isU",
+        );
+        return preg_replace($regulars, array('', ''), $str);
+    }
+    
+    /**
+     * 邮箱过滤
+     * 
+     * @param type $mail
+     * @return type 
+     */
+    public static function mailFiler($mail)
+    {
+        $mail_name_length = strpos($mail, '@');
+        return str_replace(substr($mail, 1, $mail_name_length - 2), str_repeat('*', $mail_name_length - 3), $mail);
     }
 }
 
