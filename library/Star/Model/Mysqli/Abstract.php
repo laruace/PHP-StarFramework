@@ -68,8 +68,8 @@ class Star_Model_Mysqli_Abstract implements Star_Model_Interface
         }
         
 		extract($db);
-
-		$this->db = new mysqli($host, $username, $password, $dbname);
+        !isset($port) && $port = 3306; 
+		$this->db = new mysqli($host, $username, $password, $dbname, $port);
 		
 		if ($this->db->connect_error)
 		{
