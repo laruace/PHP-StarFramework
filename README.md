@@ -73,7 +73,7 @@ RewriteCond %{REQUEST_FILENAME} -s [OR]
 RewriteCond %{REQUEST_FILENAME} -l [OR]
 RewriteCond %{REQUEST_FILENAME} -d
 RewriteRule ^.*$ - [NC,L]
-RewriteRule !(\.(js|css|png|jpg|jpeg|gif|swf|ico|html|htm)|server-status)$ index.php [NC,L]
+RewriteRule !\.(js|css|png|jpg|jpeg|gif|swf|ico|html|htm)$ index.php [NC,L]
 ```
 
 Nginx
