@@ -5,8 +5,7 @@ PHP5.2+
 #Layout
 
 A classic Application directory layout:
-<pre>
-    <code>
+```
 - .htaccess // Rewrite rules
 + public
   | - index.php // Application entry
@@ -32,8 +31,7 @@ A classic Application directory layout:
             - index.phtml // View template for default controller
 + library
     | + Star //Star Framework
-    </code>
-</pre>
+```
 #DocumentRoot
 
 you should set DocumentRoot to application/public, thus only the public folder can be accessed by user
@@ -69,20 +67,17 @@ $application->bootstrap()->run();
 
 #Rewrite rules
 Apache
-<pre>
-    <code>
+```
 RewriteEngine On
 RewriteCond %{REQUEST_FILENAME} -s [OR]
 RewriteCond %{REQUEST_FILENAME} -l [OR]
 RewriteCond %{REQUEST_FILENAME} -d
 RewriteRule ^.*$ - [NC,L]
 RewriteRule !(\.(js|css|png|jpg|jpeg|gif|swf|ico|html|htm)|server-status)$ index.php [NC,L]
-    </code>
-</pre>
+```
 
 Nginx
-<pre>
-    <code>
+```
 server {
   listen ****;
   server_name  domain.com;
@@ -97,21 +92,18 @@ server {
     rewrite ^/(.*)  /index.php/$1 last;
   }
 }
-    </code>
-</pre>
+```
 
 #application.ini
 application.ini is the application config file
-<pre>
-    <code>
+```
 [production]
 phpSettings.display_startup_errors = 0
 phpSettings.display_errors = 0
 ;includePaths.library = APPLICATION_PATH "/../library"
 bootstrap.path = APPLICATION_PATH "/Bootstrap.php"
 bootstrap.class = "Bootstrap"
-    </code>
-</pre>
+```
 
 alternatively, you can use a PHP array instead: 
 #application.php
@@ -150,8 +142,6 @@ class IndexController extends Star_Controller_Action
 
 #view script
 The view script for default controller and default action is in the application/views/scripts/index/index.phtml, Yaf provides a simple view engineer called "Star_View", which supported the view template written by PHP.
-<pre>
-<code>
 ```php
 <html>
  <head>
