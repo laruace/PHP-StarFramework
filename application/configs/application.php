@@ -9,19 +9,6 @@ return array(
 
         ),
         'displayException' => true,
-        'resources' => array(
-            'frontController' => array(
-                'params' => array(
-                    
-                ),
-                //'controllerDirectory' => APPLICATION_PATH . "/controllers",
-            ),
-            'view' => array(
-                //'theme' => 'new'
-                //'display' => false,
-            ),
-
-        ),
     ),
 );
 

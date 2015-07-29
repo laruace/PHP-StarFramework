@@ -4,3 +4,4 @@ echo .settings>.gitignore
 echo favicon.ico>.gitignore
 echo nbproject>.gitignore
 echo application/caches>.gitignore
+/nbproject/private/

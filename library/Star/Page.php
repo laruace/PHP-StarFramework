@@ -7,10 +7,10 @@
  * 分页类
  * 
  * @package library
- * @author zqy
+ * @author zhangqinyang
  * @version 1.0
  */
-class Page
+class Star_Page
 {
 	private $page = 1; //当前页面
 
