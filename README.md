@@ -39,8 +39,7 @@ A classic Application directory layout:
 you should set DocumentRoot to application/public, thus only the public folder can be accessed by user
 
 #index.php
-<pre>
-    <code>
+```php
 <?php
 // Define path to application directory
 defined('APPLICATION_PATH')
@@ -66,8 +65,7 @@ $application = new Star_Application(
     realpath(APPLICATION_PATH . '/../library')
 );
 $application->bootstrap()->run();
-    </code>
-</pre>
+```
 
 #Rewrite rules
 Apache
@@ -117,8 +115,7 @@ bootstrap.class = "Bootstrap"
 
 alternatively, you can use a PHP array instead: 
 #application.php
-<pre>
-    <code>
+```php
 <?php
 return array(
     'production' => array(
@@ -128,13 +125,10 @@ return array(
         ),
     ),
 );
-
-    </code>
-</pre>
+```
 #default controller
 In StarFramework, the default controller is named IndexController:
-<pre>
-    <code>
+```php
 <?php
 class IndexController extends Star_Controller_Action
 {
@@ -152,13 +146,13 @@ class IndexController extends Star_Controller_Action
     }
 }
 ?>
-    </code>
-</pre>
+```
 
 #view script
 The view script for default controller and default action is in the application/views/scripts/index/index.phtml, Yaf provides a simple view engineer called "Star_View", which supported the view template written by PHP.
 <pre>
 <code>
+```php
 <html>
  <head>
    <title><?php echo $this->title;?></title>
@@ -167,5 +161,5 @@ The view script for default controller and default action is in the application/
    <?php echo $this->content; ?>
  </body>
 </html>
-</code>
-</pre>
+```
+
