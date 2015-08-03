@@ -6,8 +6,8 @@ PHP5.2+
 
 A classic Application directory layout:
 ```
-- .htaccess // Rewrite rules
 + public
+  | - .htaccess // Rewrite rules
   | - index.php // Application entry
   | + static
       | + css
