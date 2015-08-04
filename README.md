@@ -1,13 +1,13 @@
 # PHP-StarFramework
-Star Framework是一个简单、高效、优雅的PHP框架。
+Star Framework是一个简单、高效、实用的PHP框架。
 #Requirement
 PHP5.2+
 #Layout
 
 A classic Application directory layout:
 ```
-- .htaccess // Rewrite rules
 + public
+  | - .htaccess // Rewrite rules
   | - index.php // Application entry
   | + static
       | + css
