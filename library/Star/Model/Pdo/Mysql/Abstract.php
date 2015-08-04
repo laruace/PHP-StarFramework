@@ -204,14 +204,14 @@ class Star_Model_Pdo_Mysql_Abstract implements Star_Model_Interface
 			$where->limit(1);
 		} 
         $stmt = $this->_fetch($where, $conditions, $table);
-		return $stmt->fetch();
+		return $stmt->fetch(PDO::FETCH_ASSOC);
 	}
 	
 	public function fetchCol($where, $conditions = null , $table = null)
 	{  
 		$stmt = $this->_fetch($where, $conditions, $table);
         $data = array();
-		while ($rs = $stmt->fetch())
+		while ($rs = $stmt->fetch(PDO::FETCH_ASSOC))
 		{
 			$data[] = $rs[0];
 		}
@@ -220,18 +220,12 @@ class Star_Model_Pdo_Mysql_Abstract implements Star_Model_Interface
     
     public function query($sql)
     {
-        $result = $this->_query($sql);
+        $stmt = $this->_query($sql);
         if ($this->isSelect($sql) == true)
         {
-            $data = array();
-            while ($rs = $result->fetch_assoc())
-            {
-                $data[] = $rs;
-            }
-            $result->free();
-            return $data;
+            return $stmt->fetchAll();
         } else {
-            return $this->rowCount();
+            return $stmt->rowCount();
         }
     }
     

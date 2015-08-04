@@ -7,7 +7,7 @@
  * 分页类
  * 
  * @package library
- * @author zhangqinyang
+ * @author zqy
  * @version 1.0
  */
 class Star_Page
