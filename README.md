@@ -153,4 +153,3 @@ The view script for default controller and default action is in the application/
 </html>
 ```
 
-#文档会在后期慢慢补上，如有问题可以加QQ： 80700794
